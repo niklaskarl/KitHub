@@ -1,4 +1,8 @@
-﻿using System;
+﻿// <copyright file="ModelPropertyAttribute.cs" company="Niklas Karl">
+// Copyright (c) Niklas Karl. All rights reserved.
+// </copyright>
+
+using System;
 
 namespace KitHub
 {

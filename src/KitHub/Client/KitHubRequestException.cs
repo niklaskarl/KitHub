@@ -1,4 +1,8 @@
-﻿using System;
+﻿// <copyright file="KitHubRequestException.cs" company="Niklas Karl">
+// Copyright (c) Niklas Karl. All rights reserved.
+// </copyright>
+
+using System;
 using System.Net;
 
 namespace KitHub

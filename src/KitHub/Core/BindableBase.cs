@@ -1,17 +1,20 @@
-﻿using System;
+﻿// <copyright file="BindableBase.cs" company="Niklas Karl">
+// Copyright (c) Niklas Karl. All rights reserved.
+// </copyright>
+
+using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 
 namespace KitHub
 {
     public class BindableBase : INotifyPropertyChanged
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-
         public BindableBase()
         {
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         protected bool SetProperty<T>(ref T storage, T value, [CallerMemberName]string propertyName = null)
         {

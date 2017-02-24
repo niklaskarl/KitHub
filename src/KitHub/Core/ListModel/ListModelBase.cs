@@ -1,4 +1,8 @@
-﻿using System;
+﻿// <copyright file="ListModelBase.cs" company="Niklas Karl">
+// Copyright (c) Niklas Karl. All rights reserved.
+// </copyright>
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
@@ -26,7 +30,7 @@ namespace KitHub
             Session = session;
             _sync = new SemaphoreSlim(1);
         }
-        
+
         internal KitHubSession Session { get; }
 
         protected abstract Uri RefreshUri { get; }
@@ -35,7 +39,7 @@ namespace KitHub
         {
             return Task.Run(() => RefreshInternalAsync(cancellationToken), cancellationToken);
         }
-        
+
         private static IListModelItemInitializer<T> CreateInitializer(ListModelAttribute attribute)
         {
             ConstructorInfo constructor = attribute.Initializer?.GetTypeInfo()?.GetConstructor(new Type[0]);
@@ -147,7 +151,7 @@ namespace KitHub
                         found = true;
                     }
                 }
-                
+
                 // clear tail as it no longer exists and add item to the end of the list
                 if (!found)
                 {
@@ -168,7 +172,7 @@ namespace KitHub
 
                     AddInternal(item);
                 }
-                
+
                 i++;
             }
         }

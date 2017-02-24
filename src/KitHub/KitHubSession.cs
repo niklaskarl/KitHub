@@ -1,4 +1,8 @@
-﻿using System;
+﻿// <copyright file="KitHubSession.cs" company="Niklas Karl">
+// Copyright (c) Niklas Karl. All rights reserved.
+// </copyright>
+
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -17,7 +21,7 @@ namespace KitHub
         }
 
         internal KitHubClient Client { get; }
-        
+
         public Task<User> GetAuthenticatedUserAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             return User.GetAuthenticatedUserAsync(this, cancellationToken);

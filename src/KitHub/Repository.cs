@@ -1,4 +1,8 @@
-﻿using System;
+﻿// <copyright file="Repository.cs" company="Niklas Karl">
+// Copyright (c) Niklas Karl. All rights reserved.
+// </copyright>
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json.Linq;

@@ -1,4 +1,8 @@
-﻿using System;
+﻿// <copyright file="User.cs" company="Niklas Karl">
+// Copyright (c) Niklas Karl. All rights reserved.
+// </copyright>
+
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -93,12 +97,12 @@ namespace KitHub
         {
             get => new Uri(Session.Client.BaseUri, new Uri(Login, UriKind.Relative));
         }
-        
-        public Task<RepositoryList> Repositories => _repositories = (_repositories ?? RepositoryList.CreateAsync(Session, new Uri($"/users/{Login}/repos", UriKind.Relative), default(CancellationToken)));
 
-        public UserList Followers => _followers = (_followers ?? new UserList(Session, new Uri($"/users/{Login}/followers", UriKind.Relative)));
+        public Task<RepositoryList> Repositories => _repositories = _repositories ?? RepositoryList.CreateAsync(Session, new Uri($"/users/{Login}/repos", UriKind.Relative), default(CancellationToken));
 
-        public UserList Following => _following = (_following ?? new UserList(Session, new Uri($"/users/{Login}/following", UriKind.Relative)));
+        public UserList Followers => _followers = _followers ?? new UserList(Session, new Uri($"/users/{Login}/followers", UriKind.Relative));
+
+        public UserList Following => _following = _following ?? new UserList(Session, new Uri($"/users/{Login}/following", UriKind.Relative));
 
         protected override Uri RefreshUri => new Uri($"/users/{Login}", UriKind.Relative);
 
@@ -155,7 +159,7 @@ namespace KitHub
 
             return user;
         }
-        
+
         internal static User GetOrCreate(KitHubSession session, string login)
         {
             if (string.IsNullOrEmpty(login))
@@ -174,7 +178,7 @@ namespace KitHub
                 {
                     User result = new User(key);
                     Cache[key] = result;
-                    
+
                     return result;
                 }
             }

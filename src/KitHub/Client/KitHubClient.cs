@@ -1,4 +1,8 @@
-﻿using System;
+﻿// <copyright file="KitHubClient.cs" company="Niklas Karl">
+// Copyright (c) Niklas Karl. All rights reserved.
+// </copyright>
+
+using System;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -64,7 +68,7 @@ namespace KitHub
             string message = content.Value<string>("message");
             return new KitHubRequestException(message, response.StatusCode);
         }
-        
+
         private async Task<KitHubResponse> SendRequestAsync(KitHubRequest arg, HttpMethod method, JToken data, CancellationToken cancellationToken)
         {
             HttpResponseMessage response = null;
@@ -147,7 +151,7 @@ namespace KitHub
                     LastModified = response.Content.Headers.LastModified?.UtcDateTime
                 };
             }
-            
+
             throw await ConstructExceptionAsync(response);
         }
     }

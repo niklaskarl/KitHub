@@ -1,16 +1,19 @@
-﻿using System;
+﻿// <copyright file="ModelBase.cs" company="Niklas Karl">
+// Copyright (c) Niklas Karl. All rights reserved.
+// </copyright>
+
+using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
 
 namespace KitHub
 {
     public abstract partial class ModelBase : BindableBase
     {
         private IDictionary<string, object> _properties;
-        
+
         private SemaphoreSlim _sync;
 
         private bool _refreshing;
@@ -23,7 +26,7 @@ namespace KitHub
         {
             _properties = new Dictionary<string, object>();
             Session = session;
-            
+
             _sync = new SemaphoreSlim(1);
         }
 
@@ -37,7 +40,7 @@ namespace KitHub
         {
             return Task.Run(() => RefreshInternalAsync(cancellationToken), cancellationToken);
         }
-        
+
         internal void SetFromResponse(KitHubResponse response)
         {
             _entityTag = response.EntityTag;

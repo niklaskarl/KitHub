@@ -1,4 +1,8 @@
-﻿using System;
+﻿// <copyright file="ListBase.cs" company="Niklas Karl">
+// Copyright (c) Niklas Karl. All rights reserved.
+// </copyright>
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -11,24 +15,12 @@ namespace KitHub
     {
         private List<T> _list;
 
-        public event NotifyCollectionChangedEventHandler CollectionChanged;
-
         internal ListBase()
         {
             _list = new List<T>();
         }
 
-        public T this[int index]
-        {
-            get => _list[index];
-            set => throw new NotSupportedException();
-        }
-
-        object IList.this[int index]
-        {
-            get => _list[index];
-            set => throw new NotSupportedException();
-        }
+        public event NotifyCollectionChangedEventHandler CollectionChanged;
 
         public int Count => _list.Count;
 
@@ -41,6 +33,18 @@ namespace KitHub
         bool ICollection.IsSynchronized => false;
 
         object ICollection.SyncRoot => this;
+
+        public T this[int index]
+        {
+            get => _list[index];
+            set => throw new NotSupportedException();
+        }
+
+        object IList.this[int index]
+        {
+            get => _list[index];
+            set => throw new NotSupportedException();
+        }
 
         void ICollection<T>.Add(T item)
         {

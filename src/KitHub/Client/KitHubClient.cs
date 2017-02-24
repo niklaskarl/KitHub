@@ -69,7 +69,14 @@ namespace KitHub
             }
 
             string message = content.Value<string>("message");
-            return new KitHubRequestException(message, response.StatusCode);
+
+            switch (response.StatusCode)
+            {
+                case HttpStatusCode.Unauthorized:
+                    return new KitHubAuthorizationException(message, response.StatusCode, content.ToString(Formatting.Indented));
+                default:
+                    return new KitHubRequestException(message, response.StatusCode, content.ToString(Formatting.Indented));
+            }
         }
 
         private async Task<KitHubResponse> SendRequestAsync(KitHubRequest arg, HttpMethod method, JToken data, CancellationToken cancellationToken)

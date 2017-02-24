@@ -21,7 +21,7 @@ namespace KitHub.Tests
     public class KitHubSessionGetAuthenticatedUserAsyncTests : KitHubSessionTests
     {
         [TestMethod]
-        [ExpectedException(typeof(KitHubRequestException))]
+        [ExpectedException(typeof(KitHubAuthorizationException))]
         public async Task ThrowsOnNotAuthenticated()
         {
             await Session.GetAuthenticatedUserAsync();

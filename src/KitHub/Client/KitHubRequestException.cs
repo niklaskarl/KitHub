@@ -11,19 +11,24 @@ using System.Net;
 namespace KitHub
 {
     /// <summary>
-    /// The exception that is thrown if GitHub reports errors with a request.
+    /// The exception that is thrown if a request to the GitHub Api fails.
     /// </summary>
-    public class KitHubRequestException : Exception
+    public class KitHubRequestException : KitHubException
     {
-        internal KitHubRequestException(string message, HttpStatusCode statusCode)
+        internal KitHubRequestException(string message, HttpStatusCode statusCode, string content)
             : base(message)
         {
             StatusCode = statusCode;
         }
-
+        
         /// <summary>
         /// Gets the status code of the response from GitHub.
         /// </summary>
         public HttpStatusCode StatusCode { get; }
+
+        /// <summary>
+        /// Gets the content of the response from GitHub.
+        /// </summary>
+        public string Content { get; }
     }
 }

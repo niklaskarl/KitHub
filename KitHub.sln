@@ -5,11 +5,11 @@ VisualStudioVersion = 15.0.26206.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KitHub", "src\KitHub\KitHub.csproj", "{B7B26603-FA7C-4807-9144-82A98F4C14FB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KitHub.Tests", "test\KitHub.Tests\KitHub.Tests.csproj", "{CFFCF463-B4B2-4831-AECA-890619D7F049}"
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{3ACF46CC-14E0-48DF-9B93-95F5CBCDC0B8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{B8ECAF41-0E22-4BC8-8345-F07E1E930A93}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KitHub.Tests", "KitHub.Tests\KitHub.Tests.csproj", "{CFFCF463-B4B2-4831-AECA-890619D7F049}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

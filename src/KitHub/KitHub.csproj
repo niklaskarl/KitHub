@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard1.5</TargetFramework>
+    <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
+    <Description />
+    <Authors>Niklas Karl</Authors>
+    <Company>Niklas Karl</Company>
+    <Product>KitHub Client for GitHub</Product>
+    <Copyright>Copyright © Niklas Karl 2017</Copyright>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
+  </ItemGroup>
+</Project>

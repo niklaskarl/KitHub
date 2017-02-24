@@ -7,6 +7,13 @@
     <Company>Niklas Karl</Company>
     <Product>KitHub Client for GitHub</Product>
     <Copyright>Copyright © Niklas Karl 2017</Copyright>
+    <SignAssembly>False</SignAssembly>
+    <PackageLicenseUrl>https://github.com/niklaskarl/KitHub/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/niklaskarl/KitHub/</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/niklaskarl/KitHub/</RepositoryUrl>
+    <RepositoryType>GitHub</RepositoryType>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DocumentationFile>bin\Debug\netstandard1.5\KitHub.xml</DocumentationFile>

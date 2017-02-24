@@ -42,7 +42,7 @@ namespace KitHub
         /// Gets the user authenticated with this session.
         /// </summary>
         /// <param name="cancellationToken">An optional <see cref="CancellationToken"/> to cancel the operation.</param>
-        /// <returns>A <see cref="Task{User}"/> indicating the state of the execution and to obtain the user.</returns>
+        /// <returns>A <see cref="Task{User}"/> representing the asynchronous operation.</returns>
         public Task<User> GetAuthenticatedUserAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             return User.GetAuthenticatedUserAsync(this, cancellationToken);
@@ -53,7 +53,7 @@ namespace KitHub
         /// </summary>
         /// <param name="login">The login name of the user to get.</param>
         /// <param name="cancellationToken">An optional <see cref="CancellationToken"/> to cancel the operation.</param>
-        /// <returns>A <see cref="Task{User}"/> indicating the state of the execution and to obtain the user.</returns>
+        /// <returns>A <see cref="Task{User}"/> representing the asynchronous operation.</returns>
         public Task<User> GetUserAsync(string login, CancellationToken cancellationToken = default(CancellationToken))
         {
             return User.GetUserAsync(this, login, cancellationToken);

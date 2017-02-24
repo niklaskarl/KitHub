@@ -22,7 +22,7 @@ namespace KitHub
 
         private UserKey _key;
 
-        private Task<RepositoryList> _repositories;
+        private RepositoryList _repositories;
 
         private UserList _followers;
 
@@ -138,26 +138,71 @@ namespace KitHub
             get => new Uri(Session.Client.BaseUri, new Uri(Login, UriKind.Relative));
         }
 
-        /// <summary>
-        /// Gets the repositories of the user.
-        /// </summary>
-        public Task<RepositoryList> Repositories => _repositories = _repositories ?? RepositoryList.CreateAsync(Session, new Uri($"/users/{Login}/repos", UriKind.Relative), default(CancellationToken));
-
-        /// <summary>
-        /// Gets the followers of the user.
-        /// </summary>
-        public UserList Followers => _followers = _followers ?? new UserList(Session, new Uri($"/users/{Login}/followers", UriKind.Relative));
-
-        /// <summary>
-        /// Gets the users following this user.
-        /// </summary>
-        public UserList Following => _following = _following ?? new UserList(Session, new Uri($"/users/{Login}/following", UriKind.Relative));
-
         /// <inheritdoc/>
         protected override Uri RefreshUri => new Uri($"/users/{Login}", UriKind.Relative);
 
         /// <inheritdoc/>
         protected override object Key => _key;
+
+        /// <summary>
+        /// Gets the repositories of the user.
+        /// </summary>
+        /// <param name="update">A value indicating whether the list should be updated if it already exists.</param>
+        /// <param name="cancellationToken">An optional <see cref="CancellationToken"/> to cancel the operation.</param>
+        /// <returns>A <see cref="Task{RepositoryList}"/> representing the asynchronous operation.</returns>
+        public async Task<RepositoryList> GetRepositoriesAsync(bool update = false, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (_repositories == null)
+            {
+                _repositories = await RepositoryList.CreateAsync(Session, new Uri($"/users/{Login}/repos", UriKind.Relative), cancellationToken);
+            }
+            else if (update)
+            {
+                await _repositories.RefreshAsync(cancellationToken);
+            }
+
+            return _repositories;
+        }
+
+        /// <summary>
+        /// Gets the followers of the user.
+        /// </summary>
+        /// <param name="update">A value indicating whether the list should be updated if it already exists.</param>
+        /// <param name="cancellationToken">An optional <see cref="CancellationToken"/> to cancel the operation.</param>
+        /// <returns>A <see cref="Task{RepositoryList}"/> representing the asynchronous operation.</returns>
+        public async Task<UserList> GetFollowersAsync(bool update = false, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (_followers == null)
+            {
+                _followers = await UserList.CreateAsync(Session, new Uri($"/users/{Login}/followers", UriKind.Relative), cancellationToken);
+            }
+            else if (update)
+            {
+                await _followers.RefreshAsync(cancellationToken);
+            }
+
+            return _followers;
+        }
+
+        /// <summary>
+        /// Gets the users following this user.
+        /// </summary>
+        /// <param name="update">A value indicating whether the list should be updated if it already exists.</param>
+        /// <param name="cancellationToken">An optional <see cref="CancellationToken"/> to cancel the operation.</param>
+        /// <returns>A <see cref="Task{RepositoryList}"/> representing the asynchronous operation.</returns>
+        public async Task<UserList> GetFollowingAsync(bool update = false, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (_following == null)
+            {
+                _following = await UserList.CreateAsync(Session, new Uri($"/users/{Login}/followers", UriKind.Relative), cancellationToken);
+            }
+            else if (update)
+            {
+                await _following.RefreshAsync(cancellationToken);
+            }
+
+            return _following;
+        }
 
         internal static async Task<User> GetAuthenticatedUserAsync(KitHubSession session, CancellationToken cancellationToken)
         {

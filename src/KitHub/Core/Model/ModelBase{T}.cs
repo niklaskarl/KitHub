@@ -52,7 +52,7 @@ namespace KitHub
         /// Refreshes the properties of the entity from the GitHub Api.
         /// </summary>
         /// <param name="cancellationToken">An optional <see cref="CancellationToken"/> to cancel the operation.</param>
-        /// <returns>A <see cref="Task"/> indicating the state of the execution.</returns>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         public Task RefreshAsync(CancellationToken cancellationToken)
         {
             return Task.Run(() => RefreshInternalAsync(cancellationToken), cancellationToken);

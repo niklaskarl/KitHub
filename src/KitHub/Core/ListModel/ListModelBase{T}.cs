@@ -49,7 +49,7 @@ namespace KitHub
         /// Refreshes the list and reloads all items.
         /// </summary>
         /// <param name="cancellationToken">An optional <see cref="CancellationToken"/> to cancel the operation.</param>
-        /// <returns>A <see cref="Task"/> indicating the state of the execution.</returns>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         public Task RefreshAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             return Task.Run(() => RefreshInternalAsync(cancellationToken), cancellationToken);

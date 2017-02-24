@@ -6,6 +6,8 @@
 // -----------------------------------------------------------------------
 
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace KitHub
 {
@@ -15,14 +17,21 @@ namespace KitHub
     [ListModel(Initializer = typeof(User.DefaultInitializer))]
     public sealed class UserList : ListModelBase<User>
     {
-        internal UserList(KitHubSession session, Uri refreshUri)
+        private UserList(KitHubSession session, Uri refreshUri)
             : base(session)
         {
             RefreshUri = refreshUri;
-            RefreshAsync();
         }
 
         /// <inheritdoc/>
         protected override Uri RefreshUri { get; }
+
+        internal static async Task<UserList> CreateAsync(KitHubSession session, Uri refreshUri, CancellationToken cancellationToken)
+        {
+            UserList list = new UserList(session, refreshUri);
+            await list.RefreshAsync(cancellationToken);
+
+            return list;
+        }
     }
 }

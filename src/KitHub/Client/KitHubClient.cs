@@ -10,6 +10,7 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -84,25 +85,28 @@ namespace KitHub
             HttpResponseMessage response = null;
             while (response == null)
             {
-                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, arg.Uri);
-                request.Headers.IfModifiedSince = arg.LastModified;
-                if (arg.EntityTag != null)
+                if (NetworkInterface.GetIsNetworkAvailable())
                 {
-                    request.Headers.IfNoneMatch.Add(new EntityTagHeaderValue(arg.EntityTag));
-                }
+                    HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, arg.Uri);
+                    request.Headers.IfModifiedSince = arg.LastModified;
+                    if (arg.EntityTag != null)
+                    {
+                        request.Headers.IfNoneMatch.Add(new EntityTagHeaderValue(arg.EntityTag));
+                    }
 
-                try
-                {
-                    response = await _client.SendAsync(request, HttpCompletionOption.ResponseContentRead, cancellationToken);
-                }
-                catch (HttpRequestException)
-                {
-                    response = null;
-                }
+                    try
+                    {
+                        response = await _client.SendAsync(request, HttpCompletionOption.ResponseContentRead, cancellationToken);
+                    }
+                    catch (HttpRequestException)
+                    {
+                        response = null;
+                    }
 
-                if (response != null && response.StatusCode >= HttpStatusCode.InternalServerError)
-                {
-                    response = null;
+                    if (response != null && response.StatusCode >= HttpStatusCode.InternalServerError)
+                    {
+                        response = null;
+                    }
                 }
 
                 if (response == null)

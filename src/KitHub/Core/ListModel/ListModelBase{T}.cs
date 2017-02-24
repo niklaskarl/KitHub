@@ -16,6 +16,10 @@ using Newtonsoft.Json.Linq;
 
 namespace KitHub
 {
+    /// <summary>
+    /// Base class for all lists.
+    /// </summary>
+    /// <typeparam name="T">The type of the list items.</typeparam>
     public abstract class ListModelBase<T> : ListBase<T>
     {
         private static readonly JsonSerializer Serializer = new JsonSerializer();
@@ -36,8 +40,16 @@ namespace KitHub
 
         internal KitHubSession Session { get; }
 
+        /// <summary>
+        /// Gets the url of the api endpoint from which to refresh the list.
+        /// </summary>
         protected abstract Uri RefreshUri { get; }
 
+        /// <summary>
+        /// Refreshes the list and reloads all items.
+        /// </summary>
+        /// <param name="cancellationToken">An optional <see cref="CancellationToken"/> to cancel the operation.</param>
+        /// <returns>A <see cref="Task"/> indicating the state of the execution.</returns>
         public Task RefreshAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             return Task.Run(() => RefreshInternalAsync(cancellationToken), cancellationToken);

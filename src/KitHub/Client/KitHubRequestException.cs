@@ -10,6 +10,9 @@ using System.Net;
 
 namespace KitHub
 {
+    /// <summary>
+    /// The exception that is thrown if GitHub reports errors with a request.
+    /// </summary>
     public class KitHubRequestException : Exception
     {
         internal KitHubRequestException(string message, HttpStatusCode statusCode)
@@ -18,6 +21,9 @@ namespace KitHub
             StatusCode = statusCode;
         }
 
+        /// <summary>
+        /// Gets the status code of the response from GitHub.
+        /// </summary>
         public HttpStatusCode StatusCode { get; }
     }
 }

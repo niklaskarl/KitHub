@@ -9,6 +9,9 @@ using System;
 
 namespace KitHub
 {
+    /// <summary>
+    /// A list of <see cref="User"/> objects.
+    /// </summary>
     [ListModel(Initializer = typeof(User.DefaultInitializer))]
     public sealed class UserList : ListModelBase<User>
     {
@@ -19,6 +22,7 @@ namespace KitHub
             RefreshAsync();
         }
 
+        /// <inheritdoc/>
         protected override Uri RefreshUri { get; }
     }
 }

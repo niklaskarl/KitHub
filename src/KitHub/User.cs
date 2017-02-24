@@ -13,6 +13,9 @@ using Newtonsoft.Json.Linq;
 
 namespace KitHub
 {
+    /// <summary>
+    /// A GitHub user.
+    /// </summary>
     public sealed class User : ModelBase
     {
         private static readonly IDictionary<UserKey, User> Cache = new Dictionary<UserKey, User>();
@@ -31,8 +34,14 @@ namespace KitHub
             _key = key;
         }
 
+        /// <summary>
+        /// Gets the login name of the user.
+        /// </summary>
         public string Login => _key.Login;
 
+        /// <summary>
+        /// Gets the name of the user.
+        /// </summary>
         [ModelProperty("name")]
         public string Name
         {
@@ -40,6 +49,9 @@ namespace KitHub
             private set => SetProperty(value);
         }
 
+        /// <summary>
+        /// Gets the company of the user.
+        /// </summary>
         [ModelProperty("company")]
         public string Company
         {
@@ -47,6 +59,9 @@ namespace KitHub
             private set => SetProperty(value);
         }
 
+        /// <summary>
+        /// Gets the location of the user.
+        /// </summary>
         [ModelProperty("location")]
         public string Location
         {
@@ -54,6 +69,10 @@ namespace KitHub
             private set => SetProperty(value);
         }
 
+        /// <summary>
+        /// Gets the email address of the user.
+        /// If the email address is not publicly visible, this property is null.
+        /// </summary>
         [ModelProperty("email")]
         public string Email
         {
@@ -61,6 +80,9 @@ namespace KitHub
             private set => SetProperty(value);
         }
 
+        /// <summary>
+        /// Gets a value indicating, whether the user is hireable or not.
+        /// </summary>
         [ModelProperty("hireable")]
         public bool? IsHireable
         {
@@ -68,6 +90,9 @@ namespace KitHub
             private set => SetProperty(value);
         }
 
+        /// <summary>
+        /// Gets the bio of the user.
+        /// </summary>
         [ModelProperty("bio")]
         public string Bio
         {
@@ -75,6 +100,9 @@ namespace KitHub
             private set => SetProperty(value);
         }
 
+        /// <summary>
+        /// Gets the timestamp at which the user profile was created.
+        /// </summary>
         [ModelProperty("created_at")]
         public DateTime? CreatedAt
         {
@@ -82,6 +110,9 @@ namespace KitHub
             private set => SetProperty(value);
         }
 
+        /// <summary>
+        /// Gets the timestamp at which the user was last updated.
+        /// </summary>
         [ModelProperty("updated_at")]
         public DateTime? UpdatedAt
         {
@@ -89,6 +120,9 @@ namespace KitHub
             private set => SetProperty(value);
         }
 
+        /// <summary>
+        /// Gets the url of the user's avatar image.
+        /// </summary>
         [ModelProperty("avatar_url")]
         public Uri AvatarUrl
         {
@@ -96,19 +130,33 @@ namespace KitHub
             private set => SetProperty(value);
         }
 
+        /// <summary>
+        /// Gets the browser url to the user profile.
+        /// </summary>
         public Uri HtmlUrl
         {
             get => new Uri(Session.Client.BaseUri, new Uri(Login, UriKind.Relative));
         }
 
+        /// <summary>
+        /// Gets the repositories of the user.
+        /// </summary>
         public Task<RepositoryList> Repositories => _repositories = _repositories ?? RepositoryList.CreateAsync(Session, new Uri($"/users/{Login}/repos", UriKind.Relative), default(CancellationToken));
 
+        /// <summary>
+        /// Gets the followers of the user.
+        /// </summary>
         public UserList Followers => _followers = _followers ?? new UserList(Session, new Uri($"/users/{Login}/followers", UriKind.Relative));
 
+        /// <summary>
+        /// Gets the users following this user.
+        /// </summary>
         public UserList Following => _following = _following ?? new UserList(Session, new Uri($"/users/{Login}/following", UriKind.Relative));
 
+        /// <inheritdoc/>
         protected override Uri RefreshUri => new Uri($"/users/{Login}", UriKind.Relative);
 
+        /// <inheritdoc/>
         protected override object Key => _key;
 
         internal static async Task<User> GetAuthenticatedUserAsync(KitHubSession session, CancellationToken cancellationToken)

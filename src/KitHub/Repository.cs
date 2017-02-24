@@ -12,6 +12,9 @@ using Newtonsoft.Json.Linq;
 
 namespace KitHub
 {
+    /// <summary>
+    /// A repository hosted on GitHub.
+    /// </summary>
     public sealed class Repository : ModelBase
     {
         private static readonly IDictionary<RepositoryKey, Repository> Cache = new Dictionary<RepositoryKey, Repository>();
@@ -24,11 +27,20 @@ namespace KitHub
             _key = key;
         }
 
+        /// <summary>
+        /// Gets the owner of the repository.
+        /// </summary>
         [ModelProperty("owner", Initializer = typeof(User.DefaultInitializer))]
         public User Owner { get => _key.Owner; }
 
+        /// <summary>
+        /// Gets the name of the repository.
+        /// </summary>
         public string Name { get => _key.Name; }
 
+        /// <summary>
+        /// Gets the id of the repository.
+        /// </summary>
         [ModelProperty("id")]
         public int? Id
         {
@@ -36,6 +48,9 @@ namespace KitHub
             private set => SetProperty(value);
         }
 
+        /// <summary>
+        /// Gets the description of the repository.
+        /// </summary>
         [ModelProperty("description")]
         public string Description
         {
@@ -43,6 +58,9 @@ namespace KitHub
             private set => SetProperty(value);
         }
 
+        /// <summary>
+        /// Gets a value indicating whether the repository is private or not.
+        /// </summary>
         [ModelProperty("private")]
         public bool? IsPrivate
         {
@@ -50,6 +68,9 @@ namespace KitHub
             private set => SetProperty(value);
         }
 
+        /// <summary>
+        /// Gets a value indicating whether the repository is fork of another repository or not..
+        /// </summary>
         [ModelProperty("fork")]
         public bool? IsFork
         {
@@ -57,6 +78,9 @@ namespace KitHub
             private set => SetProperty(value);
         }
 
+        /// <summary>
+        /// Gets the main programming language of the repository.
+        /// </summary>
         [ModelProperty("language")]
         public string Language
         {
@@ -64,6 +88,9 @@ namespace KitHub
             private set => SetProperty(value);
         }
 
+        /// <summary>
+        /// Gets the number of forks of the repository.
+        /// </summary>
         [ModelProperty("forks_count")]
         public int? ForksCount
         {
@@ -71,6 +98,9 @@ namespace KitHub
             private set => SetProperty(value);
         }
 
+        /// <summary>
+        /// Gets the number of stargazers of the repository.
+        /// </summary>
         [ModelProperty("stargazers_count")]
         public int? StargazersCount
         {
@@ -78,6 +108,9 @@ namespace KitHub
             private set => SetProperty(value);
         }
 
+        /// <summary>
+        /// Gets the number of users watching this repository.
+        /// </summary>
         [ModelProperty("watchers_count")]
         public int? WatchersCount
         {
@@ -85,6 +118,9 @@ namespace KitHub
             private set => SetProperty(value);
         }
 
+        /// <summary>
+        /// Gets the size of the repository.
+        /// </summary>
         [ModelProperty("size")]
         public int? Size
         {
@@ -92,6 +128,9 @@ namespace KitHub
             private set => SetProperty(value);
         }
 
+        /// <summary>
+        /// Gets the name of the default branch.
+        /// </summary>
         [ModelProperty("default_branch")]
         public string DefaultBranch
         {
@@ -99,6 +138,9 @@ namespace KitHub
             private set => SetProperty(value);
         }
 
+        /// <summary>
+        /// Gets the number of open issues.
+        /// </summary>
         [ModelProperty("open_issues_count")]
         public int? OpenIssuesCount
         {
@@ -106,6 +148,9 @@ namespace KitHub
             private set => SetProperty(value);
         }
 
+        /// <summary>
+        /// Gets a value indicating whether the repository has an issues section or not.
+        /// </summary>
         [ModelProperty("has_issues")]
         public bool? HasIssues
         {
@@ -113,6 +158,9 @@ namespace KitHub
             private set => SetProperty(value);
         }
 
+        /// <summary>
+        /// Gets a value indicating whether the repository has a wiki or not.
+        /// </summary>
         [ModelProperty("has_wiki")]
         public bool? HasWiki
         {
@@ -120,6 +168,9 @@ namespace KitHub
             private set => SetProperty(value);
         }
 
+        /// <summary>
+        /// Gets a value indicating whether the repository has github.io pages or not.
+        /// </summary>
         [ModelProperty("has_pages")]
         public bool? HasPages
         {
@@ -127,6 +178,9 @@ namespace KitHub
             private set => SetProperty(value);
         }
 
+        /// <summary>
+        /// Gets a value indicating whether the repository has downloads or not.
+        /// </summary>
         [ModelProperty("has_downloads")]
         public bool? HasDownloads
         {
@@ -134,6 +188,9 @@ namespace KitHub
             private set => SetProperty(value);
         }
 
+        /// <summary>
+        /// Gets the timestamp at which the repository was last pushed.
+        /// </summary>
         [ModelProperty("pushed_at")]
         public DateTime? PushedAt
         {
@@ -141,6 +198,9 @@ namespace KitHub
             private set => SetProperty(value);
         }
 
+        /// <summary>
+        /// Gets the timestamp at which the repository was created.
+        /// </summary>
         [ModelProperty("created_at")]
         public DateTime? CreatedAt
         {
@@ -148,6 +208,9 @@ namespace KitHub
             private set => SetProperty(value);
         }
 
+        /// <summary>
+        /// Gets the timestamp at which the repository was last updated.
+        /// </summary>
         [ModelProperty("updated_at")]
         public DateTime? UpdatedAt
         {
@@ -155,8 +218,10 @@ namespace KitHub
             private set => SetProperty(value);
         }
 
+        /// <inheritdoc/>
         protected override Uri RefreshUri => new Uri($"/repos/{Owner.Login}/{Name}", UriKind.Relative);
 
+        /// <inheritdoc/>
         protected override object Key { get => _key; }
 
         internal static Repository Create(KitHubSession session, JToken data)

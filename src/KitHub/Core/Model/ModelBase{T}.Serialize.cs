@@ -13,10 +13,17 @@ using Newtonsoft.Json.Linq;
 
 namespace KitHub
 {
+    /// <summary>
+    /// The base class of all entities.
+    /// </summary>
     public abstract partial class ModelBase : INotifyPropertyChanged
     {
         private static readonly JsonSerializer Serializer = new JsonSerializer();
 
+        /// <summary>
+        /// Updates the properties of the entity from a serialized representation of the entity.
+        /// </summary>
+        /// <param name="data">The serialized representation of the entity.</param>
         protected void SetFromData(JToken data)
         {
             if (data is JObject obj)

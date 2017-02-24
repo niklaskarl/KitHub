@@ -11,6 +11,9 @@ using System.Threading.Tasks;
 
 namespace KitHub
 {
+    /// <summary>
+    /// A list of <see cref="Repository"/> objects.
+    /// </summary>
     [ListModel(Initializer = typeof(Repository.DefaultInitializer))]
     public sealed class RepositoryList : ListModelBase<Repository>
     {
@@ -20,6 +23,7 @@ namespace KitHub
             RefreshUri = refreshUri;
         }
 
+        /// <inheritdoc/>
         protected override Uri RefreshUri { get; }
 
         internal static async Task<RepositoryList> CreateAsync(KitHubSession session, Uri refreshUri, CancellationToken cancellationToken)

@@ -13,6 +13,9 @@ using System.Threading.Tasks;
 
 namespace KitHub
 {
+    /// <summary>
+    /// The base class of all entities.
+    /// </summary>
     public abstract partial class ModelBase : BindableBase
     {
         private IDictionary<string, object> _properties;
@@ -35,10 +38,21 @@ namespace KitHub
 
         internal KitHubSession Session { get; }
 
+        /// <summary>
+        /// Gets the url of the api endpoint from which to refresh the entity.
+        /// </summary>
         protected abstract Uri RefreshUri { get; }
 
+        /// <summary>
+        /// Gets the key used for equality comparison.
+        /// </summary>
         protected abstract object Key { get; }
 
+        /// <summary>
+        /// Refreshes the properties of the entity from the GitHub Api.
+        /// </summary>
+        /// <param name="cancellationToken">An optional <see cref="CancellationToken"/> to cancel the operation.</param>
+        /// <returns>A <see cref="Task"/> indicating the state of the execution.</returns>
         public Task RefreshAsync(CancellationToken cancellationToken)
         {
             return Task.Run(() => RefreshInternalAsync(cancellationToken), cancellationToken);
@@ -55,6 +69,11 @@ namespace KitHub
             }
         }
 
+        /// <summary>
+        /// Gets a property from the property store and checks whether it has already been loaded.
+        /// </summary>
+        /// <param name="propertyName">The name of the property to get.</param>
+        /// <returns>The value of the property.</returns>
         protected object GetProperty([CallerMemberName]string propertyName = null)
         {
             if (_properties.TryGetValue(propertyName, out object value))
@@ -68,6 +87,11 @@ namespace KitHub
             }
         }
 
+        /// <summary>
+        /// Saves a property to the property store, marks it as loaded and raises a PropertyChanged event.
+        /// </summary>
+        /// <param name="value">The value of the property.</param>
+        /// <param name="propertyName">The name of the property</param>
         protected void SetProperty(object value, [CallerMemberName]string propertyName = null)
         {
             if (_properties.TryGetValue(propertyName, out object previous))

@@ -6,6 +6,7 @@
 // -----------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 
 namespace KitHub
@@ -19,5 +20,7 @@ namespace KitHub
         internal string EntityTag { get; set; }
 
         internal DateTime? LastModified { get; set; }
+
+        internal IReadOnlyDictionary<string, Uri> Links { get; set; }
     }
 }

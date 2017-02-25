@@ -6,12 +6,14 @@
 // -----------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.NetworkInformation;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -135,7 +137,8 @@ namespace KitHub
                     HasChanged = false,
                     Content = null,
                     EntityTag = arg.EntityTag,
-                    LastModified = arg.LastModified
+                    LastModified = arg.LastModified,
+                    Links = GetLinks(response.Headers)
                 };
             }
 
@@ -162,11 +165,36 @@ namespace KitHub
                     HasChanged = true,
                     Content = content,
                     EntityTag = response.Headers.ETag.Tag,
-                    LastModified = response.Content.Headers.LastModified?.UtcDateTime
+                    LastModified = response.Content.Headers.LastModified?.UtcDateTime,
+                    Links = GetLinks(response.Headers)
                 };
             }
 
             throw await ConstructExceptionAsync(response);
+        }
+
+        private IReadOnlyDictionary<string, Uri> GetLinks(HttpResponseHeaders headers)
+        {
+            if (headers.TryGetValues("Link", out IEnumerable<string> values))
+            {
+                SortedDictionary<string, Uri> links = new SortedDictionary<string, Uri>();
+                foreach (string value in values)
+                {
+                    string pattern = @"\G\s*<([^>]*)>\s*;\s*rel\s*=\s*""([^""]*)""\s*,?";
+                    MatchCollection matches = Regex.Matches(value, pattern);
+                    foreach (Match match in matches)
+                    {
+                        if (Uri.TryCreate(match.Groups[1].Value, UriKind.RelativeOrAbsolute, out Uri uri))
+                        {
+                            links[match.Groups[2].Value] = uri;
+                        }
+                    }
+                }
+
+                return links;
+            }
+
+            return null;
         }
     }
 }

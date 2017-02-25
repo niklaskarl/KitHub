@@ -16,7 +16,7 @@ using Newtonsoft.Json.Linq;
 namespace KitHub
 {
     /// <summary>
-    /// Base class for all lists.
+    /// The base class for all lists.
     /// </summary>
     /// <typeparam name="T">The type of the list items.</typeparam>
     public abstract class ListModelBase<T> : ListBase<T>
@@ -36,9 +36,9 @@ namespace KitHub
         }
 
         /// <summary>
-        /// Gets the url of the api endpoint from which to refresh the list.
+        /// Gets the url of the GitHub API endpoint from which to refresh the list.
         /// </summary>
-        protected abstract Uri RefreshUri { get; }
+        protected abstract Uri Uri { get; }
 
         /// <summary>
         /// Refreshes the list and reloads all items.
@@ -67,7 +67,7 @@ namespace KitHub
                 {
                     KitHubRequest request = new KitHubRequest()
                     {
-                        Uri = RefreshUri,
+                        Uri = Uri,
                         EntityTag = _entityTag,
                         LastModified = _lastModified
                     };

@@ -12,6 +12,10 @@ using System.Threading.Tasks;
 
 namespace KitHub
 {
+    /// <summary>
+    /// A page in a <see cref="PagedListModelBase{T}"/>.
+    /// </summary>
+    /// <typeparam name="T">The type of the items in the page.</typeparam>
     public class Page<T> : ListBase<T>
     {
         private PagedListModelBase<T> _container;
@@ -30,12 +34,20 @@ namespace KitHub
             Number = number;
         }
 
+        /// <summary>
+        /// The page number.
+        /// </summary>
         public int Number { get; }
         
         internal string EntityTag { get; set; }
 
         internal DateTime? LastModified { get; set; }
 
+        /// <summary>
+        /// Refreshes the page and reloads all items.
+        /// </summary>
+        /// <param name="cancellationToken">An optional <see cref="CancellationToken"/> to cancel the operation.</param>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         public Task RefreshAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             return _container.RefreshPageAsync(this, cancellationToken);

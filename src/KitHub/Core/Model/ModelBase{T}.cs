@@ -37,9 +37,9 @@ namespace KitHub
         }
 
         /// <summary>
-        /// Gets the url of the api endpoint from which to refresh the entity.
+        /// Gets the url of the GitHub API endpoint from which to refresh the entity.
         /// </summary>
-        protected abstract Uri RefreshUri { get; }
+        protected abstract Uri Uri { get; }
 
         /// <summary>
         /// Gets the key used for equality comparison.
@@ -118,7 +118,7 @@ namespace KitHub
                 {
                     KitHubRequest request = new KitHubRequest()
                     {
-                        Uri = RefreshUri,
+                        Uri = Uri,
                         EntityTag = _entityTag,
                         LastModified = _lastModified
                     };

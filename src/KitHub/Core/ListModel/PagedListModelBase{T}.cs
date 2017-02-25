@@ -16,6 +16,10 @@ using Newtonsoft.Json.Linq;
 
 namespace KitHub
 {
+    /// <summary>
+    /// The base class for all paginated lists.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public abstract class PagedListModelBase<T> : BindableBase
     {
         private Page<T>[] _pages;
@@ -30,10 +34,23 @@ namespace KitHub
             _sync = new SemaphoreSlim(1);
         }
 
+        /// <summary>
+        /// Gets the number of available pages.
+        /// </summary>
         public int PageCount => _pages.Length;
 
+        /// <summary>
+        /// Gets the url of the GitHub API endpoint from which to refresh the paged list.
+        /// </summary>
         protected abstract Uri Uri { get; }
 
+        /// <summary>
+        /// Gets the page with the given page number.
+        /// </summary>
+        /// <param name="number">The number of the page to get.</param>
+        /// <param name="refresh">A value indicating, whether the page should be refreshed if it is taken from cache.</param>
+        /// <param name="cancellationToken">An optional <see cref="CancellationToken"/> to cancel the operation.</param>
+        /// <returns>A <see cref="Task{Page}"/> representing the asynchronous operation.</returns>
         public async Task<Page<T>> GetPageAsync(int number, bool refresh = false, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (number >= PageCount)
@@ -70,6 +87,11 @@ namespace KitHub
             await Task.Run(() => RefreshPageInternalAsync(page, cancellationToken), cancellationToken);
         }
 
+        /// <summary>
+        /// Initializes the paginated list by loading the first page and checking the response header for the total number of pages.
+        /// </summary>
+        /// <param name="cancellationToken">An optional <see cref="CancellationToken"/> to cancel the operation.</param>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         protected Task InitializeAsync(CancellationToken cancellationToken)
         {
             Uri uri = Uri;

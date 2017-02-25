@@ -139,7 +139,7 @@ namespace KitHub
         }
 
         /// <inheritdoc/>
-        protected override Uri RefreshUri => new Uri($"/users/{Login}", UriKind.Relative);
+        protected override Uri Uri => new Uri($"/users/{Login}", UriKind.Relative);
 
         /// <inheritdoc/>
         protected override object Key => _key;

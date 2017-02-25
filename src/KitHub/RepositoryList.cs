@@ -20,11 +20,11 @@ namespace KitHub
         private RepositoryList(KitHubSession session, Uri refreshUri)
             : base(session)
         {
-            RefreshUri = refreshUri;
+            Uri = refreshUri;
         }
 
         /// <inheritdoc/>
-        protected override Uri RefreshUri { get; }
+        protected override Uri Uri { get; }
 
         internal static async Task<RepositoryList> CreateAsync(KitHubSession session, Uri refreshUri, CancellationToken cancellationToken)
         {

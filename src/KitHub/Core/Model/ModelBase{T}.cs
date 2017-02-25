@@ -42,11 +42,6 @@ namespace KitHub
         protected abstract Uri Uri { get; }
 
         /// <summary>
-        /// Gets the key used for equality comparison.
-        /// </summary>
-        protected abstract object Key { get; }
-
-        /// <summary>
         /// Refreshes the properties of the entity from the GitHub Api.
         /// </summary>
         /// <param name="cancellationToken">An optional <see cref="CancellationToken"/> to cancel the operation.</param>

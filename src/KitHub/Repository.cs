@@ -220,9 +220,8 @@ namespace KitHub
 
         /// <inheritdoc/>
         protected override Uri Uri => new Uri($"/repos/{Owner.Login}/{Name}", UriKind.Relative);
-
-        /// <inheritdoc/>
-        protected override object Key { get => _key; }
+        
+        private RepositoryKey Key { get => _key; }
 
         internal static Repository Create(KitHubSession session, JToken data)
         {

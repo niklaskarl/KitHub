@@ -140,9 +140,8 @@ namespace KitHub
 
         /// <inheritdoc/>
         protected override Uri Uri => new Uri($"/users/{Login}", UriKind.Relative);
-
-        /// <inheritdoc/>
-        protected override object Key => _key;
+        
+        private UserKey Key => _key;
 
         /// <summary>
         /// Gets the repositories of the user.

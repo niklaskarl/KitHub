@@ -29,14 +29,12 @@ namespace KitHub
         private DateTime? _lastModified;
 
         internal ModelBase(KitHubSession session)
+            : base(session)
         {
             _properties = new Dictionary<string, object>();
-            Session = session;
 
             _sync = new SemaphoreSlim(1);
         }
-
-        internal KitHubSession Session { get; }
 
         /// <summary>
         /// Gets the url of the api endpoint from which to refresh the entity.

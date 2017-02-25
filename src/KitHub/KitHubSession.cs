@@ -8,6 +8,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace KitHub
 {
@@ -17,6 +18,8 @@ namespace KitHub
     /// </summary>
     public class KitHubSession
     {
+        internal static readonly JsonSerializer Serializer = new JsonSerializer();
+
         /// <summary>
         /// Initializes a new instance of the <see cref="KitHubSession"/> class.
         /// The session will not be authenticated.

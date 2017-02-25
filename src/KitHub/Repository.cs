@@ -276,17 +276,9 @@ namespace KitHub
             }
         }
 
-        internal sealed class DefaultInitializer : IModelPropertyInitializer<Repository>, IListModelItemInitializer<Repository>
+        internal sealed class DefaultInitializer : IModelInitializer<Repository>
         {
-            public Repository InitializeItem(ListModelBase<Repository> self, JToken data)
-            {
-                Repository repository = Create(self.Session, data);
-                repository?.SetFromData(data);
-
-                return repository;
-            }
-
-            public Repository InitializeProperty(ModelBase self, JToken data)
+            public Repository InitializeModel(BindableBase self, JToken data)
             {
                 Repository repository = Create(self.Session, data);
                 repository?.SetFromData(data);

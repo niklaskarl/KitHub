@@ -22,9 +22,16 @@ namespace KitHub
     {
         private List<T> _list;
 
-        internal ListBase()
+        internal ListBase(KitHubSession session)
+            : base(session)
         {
             _list = new List<T>();
+        }
+
+        internal ListBase(KitHubSession session, IEnumerable<T> items)
+            : base(session)
+        {
+            _list = new List<T>(items);
         }
 
         /// <inheritdoc/>

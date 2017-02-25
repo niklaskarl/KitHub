@@ -11,7 +11,6 @@ using System.IO;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace KitHub
@@ -22,8 +21,6 @@ namespace KitHub
     /// <typeparam name="T">The type of the list items.</typeparam>
     public abstract class ListModelBase<T> : ListBase<T>
     {
-        private static readonly JsonSerializer Serializer = new JsonSerializer();
-
         private SemaphoreSlim _sync;
 
         private bool _refreshing;
@@ -33,12 +30,10 @@ namespace KitHub
         private DateTime? _lastModified;
 
         internal ListModelBase(KitHubSession session)
+            : base(session)
         {
-            Session = session;
             _sync = new SemaphoreSlim(1);
         }
-
-        internal KitHubSession Session { get; }
 
         /// <summary>
         /// Gets the url of the api endpoint from which to refresh the list.
@@ -55,10 +50,10 @@ namespace KitHub
             return Task.Run(() => RefreshInternalAsync(cancellationToken), cancellationToken);
         }
 
-        private static IListModelItemInitializer<T> CreateInitializer(ListModelAttribute attribute)
+        private static IModelInitializer<T> CreateInitializer(ListModelAttribute attribute)
         {
             ConstructorInfo constructor = attribute.Initializer?.GetTypeInfo()?.GetConstructor(new Type[0]);
-            return constructor?.Invoke(null) as IListModelItemInitializer<T>;
+            return constructor?.Invoke(null) as IModelInitializer<T>;
         }
 
         private async Task RefreshInternalAsync(CancellationToken cancellationToken)
@@ -106,7 +101,7 @@ namespace KitHub
                 ListModelAttribute attribute = type.GetCustomAttribute<ListModelAttribute>(true);
                 if (attribute != null)
                 {
-                    IListModelItemInitializer<T> initializer = CreateInitializer(attribute);
+                    IModelInitializer<T> initializer = CreateInitializer(attribute);
                     if (initializer != null)
                     {
                         items = InitializeItemsFromData(array, initializer);
@@ -131,18 +126,18 @@ namespace KitHub
             List<T> items = new List<T>(data.Count);
             foreach (JToken item in data)
             {
-                items.Add(item.ToObject<T>(Serializer));
+                items.Add(item.ToObject<T>(KitHubSession.Serializer));
             }
 
             return items;
         }
 
-        private IReadOnlyList<T> InitializeItemsFromData(JArray data, IListModelItemInitializer<T> initializer)
+        private IReadOnlyList<T> InitializeItemsFromData(JArray data, IModelInitializer<T> initializer)
         {
             List<T> items = new List<T>(data.Count);
             foreach (JToken item in data)
             {
-                items.Add(initializer.InitializeItem(this, item));
+                items.Add(initializer.InitializeModel(this, item));
             }
 
             return items;

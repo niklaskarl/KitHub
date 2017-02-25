@@ -280,14 +280,9 @@ namespace KitHub
             }
         }
 
-        internal sealed class DefaultInitializer : IModelPropertyInitializer<User>, IListModelItemInitializer<User>
+        internal sealed class DefaultInitializer : IModelInitializer<User>
         {
-            public User InitializeItem(ListModelBase<User> self, JToken data)
-            {
-                return Create(self.Session, data);
-            }
-
-            public User InitializeProperty(ModelBase self, JToken data)
+            public User InitializeModel(BindableBase self, JToken data)
             {
                 return Create(self.Session, data);
             }

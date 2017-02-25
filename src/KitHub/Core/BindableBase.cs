@@ -16,12 +16,15 @@ namespace KitHub
     /// </summary>
     public class BindableBase : INotifyPropertyChanged
     {
-        internal BindableBase()
+        internal BindableBase(KitHubSession session)
         {
+            Session = session;
         }
 
         /// <inheritdoc/>
         public event PropertyChangedEventHandler PropertyChanged;
+
+        internal KitHubSession Session { get; }
 
         /// <summary>
         /// Sets the backing field of a property and raises a PropertyChanged event.

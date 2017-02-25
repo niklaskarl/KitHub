@@ -9,7 +9,7 @@ using System;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 
-namespace KitHub
+namespace KitHub.Client
 {
     internal class KitHubResponse
     {

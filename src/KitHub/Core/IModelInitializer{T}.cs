@@ -8,7 +8,7 @@
 using System;
 using Newtonsoft.Json.Linq;
 
-namespace KitHub
+namespace KitHub.Core
 {
     internal interface IModelInitializer<T>
     {

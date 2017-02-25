@@ -8,6 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using KitHub.Core;
 using Newtonsoft.Json.Linq;
 
 namespace KitHub
@@ -15,7 +16,7 @@ namespace KitHub
     /// <summary>
     /// A repository hosted on GitHub.
     /// </summary>
-    public sealed class Repository : ModelBase
+    public sealed class Repository : RefreshableModelBase
     {
         private static readonly IDictionary<RepositoryKey, Repository> Cache = new Dictionary<RepositoryKey, Repository>();
 

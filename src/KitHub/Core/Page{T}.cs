@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace KitHub
+namespace KitHub.Core
 {
     /// <summary>
     /// A page in a <see cref="PagedListModelBase{T}"/>.

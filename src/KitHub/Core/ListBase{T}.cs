@@ -12,7 +12,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 
-namespace KitHub
+namespace KitHub.Core
 {
     /// <summary>
     /// A readonly implementation of <see cref="IList{T}"/>.

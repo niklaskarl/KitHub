@@ -9,6 +9,8 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using KitHub.Client;
+using KitHub.Core;
 using Newtonsoft.Json.Linq;
 
 namespace KitHub
@@ -16,7 +18,7 @@ namespace KitHub
     /// <summary>
     /// A GitHub user.
     /// </summary>
-    public sealed class User : ModelBase
+    public sealed class User : RefreshableModelBase
     {
         private static readonly IDictionary<UserKey, User> Cache = new Dictionary<UserKey, User>();
 

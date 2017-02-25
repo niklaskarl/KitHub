@@ -1,24 +1,18 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="ModelBase{T}.Serialize.cs" company="Niklas Karl">
-// Copyright (c) Niklas Karl. All rights reserved.
-// Licensed under the MIT license. See LICENSE file in the project root for full license information.
-// </copyright>
-// -----------------------------------------------------------------------
-
-using System;
-using System.ComponentModel;
+﻿using System;
 using System.Reflection;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace KitHub
+namespace KitHub.Core
 {
     /// <summary>
-    /// The base class of all entities.
+    /// The base class of all entities that are serializable.
     /// </summary>
-    public abstract partial class ModelBase : INotifyPropertyChanged
+    public abstract class SerializableModelBase : BindableBase
     {
-        private static readonly JsonSerializer Serializer = new JsonSerializer();
+        internal SerializableModelBase(KitHubSession session)
+            : base(session)
+        {
+        }
 
         /// <summary>
         /// Updates the properties of the entity from a serialized representation of the entity.
@@ -49,7 +43,7 @@ namespace KitHub
             if (data.TryGetValue(name, out JToken value))
             {
                 TypeInfo type = property.PropertyType.GetTypeInfo();
-                if (type.IsSubclassOf(typeof(ModelBase)))
+                if (type.IsSubclassOf(typeof(RefreshableModelBase)))
                 {
                     // TODO
                 }
@@ -69,7 +63,7 @@ namespace KitHub
         {
             if (property.CanWrite)
             {
-                property.SetValue(this, data.ToObject(property.PropertyType, Serializer));
+                property.SetValue(this, data.ToObject(property.PropertyType, KitHubSession.Serializer));
             }
             else if (property.CanRead)
             {

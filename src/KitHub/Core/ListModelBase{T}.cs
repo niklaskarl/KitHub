@@ -11,9 +11,10 @@ using System.IO;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using KitHub.Client;
 using Newtonsoft.Json.Linq;
 
-namespace KitHub
+namespace KitHub.Core
 {
     /// <summary>
     /// The base class for all lists.

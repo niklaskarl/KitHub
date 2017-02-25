@@ -9,7 +9,7 @@ using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace KitHub
+namespace KitHub.Core
 {
     /// <summary>
     /// Provides an implementation of <see cref="INotifyPropertyChanged"/>.

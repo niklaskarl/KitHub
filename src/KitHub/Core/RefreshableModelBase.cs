@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="ModelBase{T}.cs" company="Niklas Karl">
+// <copyright file="RefreshableModelBase.cs" company="Niklas Karl">
 // Copyright (c) Niklas Karl. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
@@ -10,13 +10,14 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
+using KitHub.Client;
 
-namespace KitHub
+namespace KitHub.Core
 {
     /// <summary>
     /// The base class of all entities.
     /// </summary>
-    public abstract partial class ModelBase : BindableBase
+    public abstract class RefreshableModelBase : SerializableModelBase
     {
         private IDictionary<string, object> _properties;
 
@@ -28,7 +29,7 @@ namespace KitHub
 
         private DateTime? _lastModified;
 
-        internal ModelBase(KitHubSession session)
+        internal RefreshableModelBase(KitHubSession session)
             : base(session)
         {
             _properties = new Dictionary<string, object>();

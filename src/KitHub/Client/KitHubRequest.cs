@@ -7,7 +7,7 @@
 
 using System;
 
-namespace KitHub
+namespace KitHub.Client
 {
     internal class KitHubRequest
     {

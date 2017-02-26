@@ -35,7 +35,7 @@ namespace KitHub.Core
         }
 
         /// <summary>
-        /// The page number.
+        /// Gets the zero-based page number.
         /// </summary>
         public int Number { get; }
         

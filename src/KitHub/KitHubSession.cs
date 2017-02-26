@@ -63,6 +63,16 @@ namespace KitHub
             return User.GetUserAsync(this, login, cancellationToken);
         }
 
+        /// <summary>
+        /// Gets the public events of all GitHub in a paged list.
+        /// </summary>
+        /// <param name="cancellationToken">An optional <see cref="CancellationToken"/> to cancel the operation.</param>
+        /// <returns>A <see cref="Task{PagedActivityList}"/> representing the asynchronous operation.</returns>
+        public Task<PagedActivityList> GetPublicEventsAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return PagedActivityList.CreateAsync(this, new Uri("/events", UriKind.Relative), cancellationToken);
+        }
+
         internal Task DispatchAsync(Action action)
         {
             action();

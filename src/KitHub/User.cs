@@ -42,6 +42,16 @@ namespace KitHub
         public string Login => _key.Login;
 
         /// <summary>
+        /// Gets the id of the user.
+        /// </summary>
+        [ModelProperty("id")]
+        public long? Id
+        {
+            get => GetProperty() as long?;
+            internal set => SetProperty(value);
+        }
+
+        /// <summary>
         /// Gets the name of the user.
         /// </summary>
         [ModelProperty("name")]
@@ -106,7 +116,7 @@ namespace KitHub
         /// Gets the timestamp at which the user profile was created.
         /// </summary>
         [ModelProperty("created_at")]
-        public DateTime? CreatedAt
+        public DateTimeOffset? CreatedAt
         {
             get => GetProperty() as DateTime?;
             private set => SetProperty(value);
@@ -116,7 +126,7 @@ namespace KitHub
         /// Gets the timestamp at which the user was last updated.
         /// </summary>
         [ModelProperty("updated_at")]
-        public DateTime? UpdatedAt
+        public DateTimeOffset? UpdatedAt
         {
             get => GetProperty() as DateTime?;
             private set => SetProperty(value);
@@ -129,7 +139,7 @@ namespace KitHub
         public Uri AvatarUrl
         {
             get => GetProperty() as Uri;
-            private set => SetProperty(value);
+            internal set => SetProperty(value);
         }
 
         /// <summary>
@@ -281,9 +291,9 @@ namespace KitHub
             }
         }
 
-        internal sealed class DefaultInitializer : IModelInitializer<User>
+        internal sealed class DefaultInitializer : IModelInitializer
         {
-            public User InitializeModel(BindableBase self, JToken data)
+            public object InitializeModel(BindableBase self, JToken data)
             {
                 return Create(self.Session, data);
             }

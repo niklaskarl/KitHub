@@ -43,10 +43,10 @@ namespace KitHub
         /// Gets the id of the repository.
         /// </summary>
         [ModelProperty("id")]
-        public int? Id
+        public long? Id
         {
-            get => GetProperty() as int?;
-            private set => SetProperty(value);
+            get => GetProperty() as long?;
+            internal set => SetProperty(value);
         }
 
         /// <summary>
@@ -193,7 +193,7 @@ namespace KitHub
         /// Gets the timestamp at which the repository was last pushed.
         /// </summary>
         [ModelProperty("pushed_at")]
-        public DateTime? PushedAt
+        public DateTimeOffset? PushedAt
         {
             get => GetProperty() as DateTime?;
             private set => SetProperty(value);
@@ -203,7 +203,7 @@ namespace KitHub
         /// Gets the timestamp at which the repository was created.
         /// </summary>
         [ModelProperty("created_at")]
-        public DateTime? CreatedAt
+        public DateTimeOffset? CreatedAt
         {
             get => GetProperty() as DateTime?;
             private set => SetProperty(value);
@@ -213,7 +213,7 @@ namespace KitHub
         /// Gets the timestamp at which the repository was last updated.
         /// </summary>
         [ModelProperty("updated_at")]
-        public DateTime? UpdatedAt
+        public DateTimeOffset? UpdatedAt
         {
             get => GetProperty() as DateTime?;
             private set => SetProperty(value);
@@ -245,13 +245,21 @@ namespace KitHub
             {
                 return null;
             }
+            
+            string name = data.Value<string>("name");
+            Repository repository = GetOrCreate(session, owner, name);
+            repository.SetFromData(data);
 
+            return repository;
+        }
+
+        internal static Repository GetOrCreate(KitHubSession session, User owner, string name)
+        {
             if (owner == null)
             {
                 throw new ArgumentException("The owner of a repository must not be null.");
             }
-
-            string name = data.Value<string>("name");
+            
             if (string.IsNullOrEmpty(name))
             {
                 throw new ArgumentException("The name of a repository must not be null or empty.");
@@ -262,23 +270,21 @@ namespace KitHub
             {
                 if (Cache.TryGetValue(key, out Repository existing))
                 {
-                    existing.SetFromData(data);
                     return existing;
                 }
                 else
                 {
                     Repository result = new Repository(key);
                     Cache[key] = result;
-
-                    result.SetFromData(data);
+                    
                     return result;
                 }
             }
         }
 
-        internal sealed class DefaultInitializer : IModelInitializer<Repository>
+        internal sealed class DefaultInitializer : IModelInitializer
         {
-            public Repository InitializeModel(BindableBase self, JToken data)
+            public object InitializeModel(BindableBase self, JToken data)
             {
                 Repository repository = Create(self.Session, data);
                 repository?.SetFromData(data);

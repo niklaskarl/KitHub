@@ -38,8 +38,21 @@ namespace KitHub.Tests
             string email = "octocat@github.com";
 
             User user = await Session.GetUserAsync(login);
+            Assert.IsNotNull(user);
             Assert.AreEqual(login, user.Login);
             Assert.AreEqual(email, user.Email);
+        }
+    }
+
+    [TestClass]
+    public class KitHubSessionGetPublicEventsAsyncTests : KitHubSessionTests
+    {
+        [TestMethod]
+        public async Task ReturnsValidList()
+        {
+            PagedActivityList list = await Session.GetPublicEventsAsync();
+            Assert.IsNotNull(list);
+            Assert.AreEqual(10, list.PageCount);
         }
     }
 }

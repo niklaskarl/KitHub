@@ -31,10 +31,14 @@ namespace KitHub.Core
                         SetPropertyFromData(obj, property, attribute);
                         continue;
                     }
-
-                    // TODO check for list attribute
                 }
             }
+        }
+
+        private static IModelInitializer CreateInitializer(ModelPropertyAttribute attribute)
+        {
+            ConstructorInfo constructor = attribute.Initializer?.GetTypeInfo()?.GetConstructor(new Type[0]);
+            return constructor?.Invoke(null) as IModelInitializer;
         }
 
         private void SetPropertyFromData(JObject data, PropertyInfo property, ModelPropertyAttribute attribute)
@@ -43,24 +47,41 @@ namespace KitHub.Core
             if (data.TryGetValue(name, out JToken value))
             {
                 TypeInfo type = property.PropertyType.GetTypeInfo();
-                if (type.IsSubclassOf(typeof(RefreshableModelBase)))
+                if (type.IsSubclassOf(typeof(SerializableModelBase)))
                 {
-                    // TODO
+                    SetModelPropertyFromData(value, property, attribute);
                 }
                 else
                 {
-                    SetNonModelPropertyFromData(value, property);
+                    SetNonModelPropertyFromData(value, property, attribute);
                 }
             }
         }
 
-        private void SetModelPropertyFromData(JToken data, PropertyInfo property)
+        private void SetModelPropertyFromData(JToken data, PropertyInfo property, ModelPropertyAttribute attribute)
         {
-            // TODO
+            IModelInitializer initializer = CreateInitializer(attribute);
+            if (initializer != null)
+            {
+                SerializableModelBase value = initializer.InitializeModel(this, data) as SerializableModelBase;
+                if (property.CanWrite)
+                {
+                    property.SetValue(this, value);
+                }
+                else if (property.CanWrite)
+                {
+                    if (property.GetValue(this) is SerializableModelBase existing && Equals(value, existing) && !ReferenceEquals(value, existing))
+                    {
+                        existing.SetFromData(data);
+                    }
+                }
+            }
         }
 
-        private void SetNonModelPropertyFromData(JToken data, PropertyInfo property)
+        private void SetNonModelPropertyFromData(JToken data, PropertyInfo property, ModelPropertyAttribute attribute)
         {
+            // TODO check for initializer
+
             if (property.CanWrite)
             {
                 property.SetValue(this, data.ToObject(property.PropertyType, KitHubSession.Serializer));

@@ -51,10 +51,10 @@ namespace KitHub.Core
             return Task.Run(() => RefreshInternalAsync(cancellationToken), cancellationToken);
         }
 
-        private static IModelInitializer<T> CreateInitializer(ListModelAttribute attribute)
+        private static IModelInitializer CreateInitializer(ListModelAttribute attribute)
         {
             ConstructorInfo constructor = attribute.Initializer?.GetTypeInfo()?.GetConstructor(new Type[0]);
-            return constructor?.Invoke(null) as IModelInitializer<T>;
+            return constructor?.Invoke(null) as IModelInitializer;
         }
 
         private async Task RefreshInternalAsync(CancellationToken cancellationToken)
@@ -102,7 +102,7 @@ namespace KitHub.Core
                 ListModelAttribute attribute = type.GetCustomAttribute<ListModelAttribute>(true);
                 if (attribute != null)
                 {
-                    IModelInitializer<T> initializer = CreateInitializer(attribute);
+                    IModelInitializer initializer = CreateInitializer(attribute);
                     if (initializer != null)
                     {
                         items = InitializeItemsFromData(array, initializer);
@@ -133,12 +133,12 @@ namespace KitHub.Core
             return items;
         }
 
-        private IReadOnlyList<T> InitializeItemsFromData(JArray data, IModelInitializer<T> initializer)
+        private IReadOnlyList<T> InitializeItemsFromData(JArray data, IModelInitializer initializer)
         {
             List<T> items = new List<T>(data.Count);
             foreach (JToken item in data)
             {
-                items.Add(initializer.InitializeModel(this, item));
+                items.Add((T)initializer.InitializeModel(this, item));
             }
 
             return items;

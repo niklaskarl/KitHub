@@ -14,7 +14,11 @@ namespace KitHub
     /// </summary>
     public class KitHubException : Exception
     {
-        internal KitHubException(string message)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="KitHubException"/> class.
+        /// </summary>
+        /// <param name="message">The message describing the exception.</param>
+        public KitHubException(string message)
             : base(message)
         {
         }

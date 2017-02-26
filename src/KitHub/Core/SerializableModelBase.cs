@@ -49,14 +49,22 @@ namespace KitHub.Core
 
         private static IModelInitializer CreateInitializer(ModelPropertyAttribute attribute)
         {
-            ConstructorInfo constructor = attribute.Initializer?.GetTypeInfo()?.GetConstructor(new Type[0]);
-            return constructor?.Invoke(null) as IModelInitializer;
+            if (attribute.Initializer != null)
+            {
+                return Activator.CreateInstance(attribute.Initializer) as IModelInitializer;
+            }
+
+            return null;
         }
 
         private static IModelInitializer CreateInitializer(ModelListPropertyAttribute attribute)
         {
-            ConstructorInfo constructor = attribute.Initializer?.GetTypeInfo()?.GetConstructor(new Type[0]);
-            return constructor?.Invoke(null) as IModelInitializer;
+            if (attribute.Initializer != null)
+            {
+                return Activator.CreateInstance(attribute.Initializer) as IModelInitializer;
+            }
+
+            return null;
         }
 
         private void SetPropertyFromData(JObject data, PropertyInfo property, ModelPropertyAttribute attribute)

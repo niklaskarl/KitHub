@@ -53,8 +53,12 @@ namespace KitHub.Core
 
         private static IModelInitializer CreateInitializer(ListModelAttribute attribute)
         {
-            ConstructorInfo constructor = attribute.Initializer?.GetTypeInfo()?.GetConstructor(new Type[0]);
-            return constructor?.Invoke(null) as IModelInitializer;
+            if (attribute.Initializer != null)
+            {
+                return Activator.CreateInstance(attribute.Initializer) as IModelInitializer;
+            }
+
+            return null;
         }
 
         private async Task RefreshInternalAsync(CancellationToken cancellationToken)

@@ -15,7 +15,13 @@ namespace KitHub
     /// </summary>
     public class KitHubAuthorizationException : KitHubRequestException
     {
-        internal KitHubAuthorizationException(string message, HttpStatusCode statusCode, string content)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="KitHubAuthorizationException"/> class.
+        /// </summary>
+        /// <param name="message">The message describing the exception.</param>
+        /// <param name="statusCode">The status code returned by the request.</param>
+        /// <param name="content">The content returned by the request.</param>
+        public KitHubAuthorizationException(string message, HttpStatusCode statusCode, string content)
             : base(message, HttpStatusCode.Unauthorized, content)
         {
         }

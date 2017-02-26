@@ -15,7 +15,13 @@ namespace KitHub
     /// </summary>
     public class KitHubRequestException : KitHubException
     {
-        internal KitHubRequestException(string message, HttpStatusCode statusCode, string content)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="KitHubRequestException"/> class.
+        /// </summary>
+        /// <param name="message">The message describing the exception.</param>
+        /// <param name="statusCode">The status code returned by the request.</param>
+        /// <param name="content">The content returned by the request.</param>
+        public KitHubRequestException(string message, HttpStatusCode statusCode, string content)
             : base(message)
         {
             StatusCode = statusCode;

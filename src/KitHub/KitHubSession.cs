@@ -76,7 +76,7 @@ namespace KitHub
         internal Task DispatchAsync(Action action)
         {
             action();
-            return Task.CompletedTask;
+            return Task<object>.FromResult((object)null);
         }
     }
 }

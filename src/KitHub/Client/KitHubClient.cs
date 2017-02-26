@@ -177,7 +177,7 @@ namespace KitHub.Client
         {
             if (headers.TryGetValues("Link", out IEnumerable<string> values))
             {
-                SortedDictionary<string, Uri> links = new SortedDictionary<string, Uri>();
+                Dictionary<string, Uri> links = new Dictionary<string, Uri>();
                 foreach (string value in values)
                 {
                     string pattern = @"\G\s*<([^>]*)>\s*;\s*rel\s*=\s*""([^""]*)""\s*,?";

@@ -50,7 +50,7 @@ namespace KitHub.Tests
         [TestMethod]
         public async Task ReturnsValidList()
         {
-            PagedActivityList list = await Session.GetPublicEventsAsync();
+            PagedEventList list = await Session.GetPublicEventsAsync();
             Assert.IsNotNull(list);
             Assert.AreEqual(10, list.PageCount);
         }

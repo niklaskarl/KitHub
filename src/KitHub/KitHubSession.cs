@@ -68,9 +68,9 @@ namespace KitHub
         /// </summary>
         /// <param name="cancellationToken">An optional <see cref="CancellationToken"/> to cancel the operation.</param>
         /// <returns>A <see cref="Task{PagedActivityList}"/> representing the asynchronous operation.</returns>
-        public Task<PagedActivityList> GetPublicEventsAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public Task<PagedEventList> GetPublicEventsAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            return PagedActivityList.CreateAsync(this, new Uri("/events", UriKind.Relative), cancellationToken);
+            return PagedEventList.CreateAsync(this, new Uri("/events", UriKind.Relative), cancellationToken);
         }
 
         internal Task DispatchAsync(Action action)

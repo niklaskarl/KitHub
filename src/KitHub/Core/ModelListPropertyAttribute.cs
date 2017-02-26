@@ -10,9 +10,9 @@ using System;
 namespace KitHub.Core
 {
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
-    internal sealed class ModelPropertyAttribute : Attribute
+    internal sealed class ModelListPropertyAttribute : Attribute
     {
-        public ModelPropertyAttribute(string propertyName)
+        public ModelListPropertyAttribute(string propertyName)
         {
             PropertyName = propertyName;
         }

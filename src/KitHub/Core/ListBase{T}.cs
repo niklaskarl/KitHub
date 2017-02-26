@@ -112,7 +112,7 @@ namespace KitHub.Core
         }
 
         /// <inheritdoc/>
-        public void CopyTo(Array array, int index)
+        void ICollection.CopyTo(Array array, int index)
         {
             (_list as IList).CopyTo(array, index);
         }

@@ -23,14 +23,26 @@ namespace KitHub.Core
             if (data is JObject obj)
             {
                 TypeInfo type = GetType().GetTypeInfo();
-                foreach (PropertyInfo property in type.DeclaredProperties)
+                while (type != null)
                 {
-                    ModelPropertyAttribute attribute = property.GetCustomAttribute<ModelPropertyAttribute>(true);
-                    if (attribute != null)
+                    foreach (PropertyInfo property in type.DeclaredProperties)
                     {
-                        SetPropertyFromData(obj, property, attribute);
-                        continue;
+                        ModelPropertyAttribute attribute = property.GetCustomAttribute<ModelPropertyAttribute>(true);
+                        if (attribute != null)
+                        {
+                            SetPropertyFromData(obj, property, attribute);
+                            continue;
+                        }
+
+                        ModelListPropertyAttribute listAttribute = property.GetCustomAttribute<ModelListPropertyAttribute>(true);
+                        if (listAttribute != null)
+                        {
+                            SetListFromData(obj, property, listAttribute);
+                            continue;
+                        }
                     }
+
+                    type = type.BaseType?.GetTypeInfo();
                 }
             }
         }
@@ -41,26 +53,33 @@ namespace KitHub.Core
             return constructor?.Invoke(null) as IModelInitializer;
         }
 
+        private static IModelInitializer CreateInitializer(ModelListPropertyAttribute attribute)
+        {
+            ConstructorInfo constructor = attribute.Initializer?.GetTypeInfo()?.GetConstructor(new Type[0]);
+            return constructor?.Invoke(null) as IModelInitializer;
+        }
+
         private void SetPropertyFromData(JObject data, PropertyInfo property, ModelPropertyAttribute attribute)
         {
             string name = attribute.PropertyName ?? property.Name;
-            if (data.TryGetValue(name, out JToken value))
+            JToken value = data.SelectToken(name);
+            if (value != null)
             {
                 TypeInfo type = property.PropertyType.GetTypeInfo();
+                IModelInitializer initializer = CreateInitializer(attribute);
                 if (type.IsSubclassOf(typeof(SerializableModelBase)))
                 {
-                    SetModelPropertyFromData(value, property, attribute);
+                    SetModelPropertyFromData(value, property, initializer);
                 }
                 else
                 {
-                    SetNonModelPropertyFromData(value, property, attribute);
+                    SetNonModelPropertyFromData(value, property, initializer);
                 }
             }
         }
 
-        private void SetModelPropertyFromData(JToken data, PropertyInfo property, ModelPropertyAttribute attribute)
+        private void SetModelPropertyFromData(JToken data, PropertyInfo property, IModelInitializer initializer)
         {
-            IModelInitializer initializer = CreateInitializer(attribute);
             if (initializer != null)
             {
                 SerializableModelBase value = initializer.InitializeModel(this, data) as SerializableModelBase;
@@ -78,7 +97,7 @@ namespace KitHub.Core
             }
         }
 
-        private void SetNonModelPropertyFromData(JToken data, PropertyInfo property, ModelPropertyAttribute attribute)
+        private void SetNonModelPropertyFromData(JToken data, PropertyInfo property, IModelInitializer initializer)
         {
             // TODO check for initializer
 
@@ -90,6 +109,31 @@ namespace KitHub.Core
             {
                 // TODO check for lists
                 // TODO check for dictionaries
+            }
+        }
+
+        private void SetListFromData(JObject data, PropertyInfo property, ModelListPropertyAttribute attribute)
+        {
+            string name = attribute.PropertyName ?? property.Name;
+            JToken value = data.SelectToken(name);
+            if (value is JArray array)
+            {
+                IModelInitializer initializer = CreateInitializer(attribute);
+                if (property.CanRead)
+                {
+                    object current = property.GetValue(this);
+                    if (current != null)
+                    {
+                        TypeInfo currentType = current.GetType().GetTypeInfo();
+                        Type modelListType = typeof(ModelListProperty<>).MakeGenericType(currentType.GenericTypeArguments[0]);
+                        if (currentType.AsType() == modelListType || currentType.IsSubclassOf(modelListType))
+                        {
+                            MethodInfo method = modelListType.GetTypeInfo().GetDeclaredMethod(nameof(ModelListProperty<object>.UpdateList));
+                            method.Invoke(current, new object[] { this, array, initializer });
+                            return;
+                        }
+                    }
+                }
             }
         }
     }

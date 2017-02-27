@@ -17,6 +17,7 @@ namespace KitHub
         private Label(LabelKey key)
             : base(key.Session)
         {
+            _key = key;
         }
 
         /// <summary>
@@ -106,7 +107,7 @@ namespace KitHub
             }
         }
 
-        private class LabelKey
+        private sealed class LabelKey
         {
             public LabelKey(KitHubSession session, Repository repository, string name)
             {

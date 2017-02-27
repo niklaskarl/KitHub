@@ -1,4 +1,11 @@
-﻿using System;
+﻿// -----------------------------------------------------------------------
+// <copyright file="LAbel.cs" company="Niklas Karl">
+// Copyright (c) Niklas Karl. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+// -----------------------------------------------------------------------
+
+using System;
 using System.Collections.Generic;
 using KitHub.Core;
 using Newtonsoft.Json.Linq;
@@ -66,16 +73,20 @@ namespace KitHub
         
         internal static Label Create(KitHubSession session, Repository repository, JToken data)
         {
-            if (data == null)
+            if (data == null || data.Type == JTokenType.Null)
             {
                 return null;
             }
 
-            string name = data.Value<string>("name");
-            Label label = GetOrCreate(session, repository, name);
-            label.SetFromData(data);
+            if (data is JObject obj && obj.TryGetValue("name", out JToken nameToken) && nameToken is JValue nameValue && nameValue.Value is string name)
+            {
+                Label label = GetOrCreate(session, repository, name);
+                label.SetFromData(data);
 
-            return label;
+                return label;
+            }
+
+            throw new KitHubDataException("The label object is invalid.", data);
         }
 
         internal static Label GetOrCreate(KitHubSession session, Repository repository, string name)

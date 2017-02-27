@@ -1,4 +1,11 @@
-﻿using System;
+﻿// -----------------------------------------------------------------------
+// <copyright file="Issue.cs" company="Niklas Karl">
+// Copyright (c) Niklas Karl. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+// -----------------------------------------------------------------------
+
+using System;
 using System.Collections.Generic;
 using KitHub.Core;
 using Newtonsoft.Json;
@@ -183,16 +190,20 @@ namespace KitHub
 
         internal static Issue Create(KitHubSession session, Repository repository, JToken data)
         {
-            if (data == null)
+            if (data == null || data.Type == JTokenType.Null)
             {
                 return null;
             }
+            
+            if (data is JObject obj && obj.TryGetValue("number", out JToken numberToken) && numberToken.Type == JTokenType.Integer)
+            {
+                Issue issue = GetOrCreate(session, repository, numberToken.Value<int>());
+                issue.SetFromData(data);
 
-            int number = data.Value<int>("number");
-            Issue issue = GetOrCreate(session, repository, number);
-            issue.SetFromData(data);
+                return issue;
+            }
 
-            return issue;
+            throw new KitHubDataException("The issue object is invalid.", data);
         }
 
         internal static Issue GetOrCreate(KitHubSession session, Repository repository, int number)

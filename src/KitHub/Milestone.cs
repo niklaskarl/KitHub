@@ -1,4 +1,11 @@
-﻿using System;
+﻿// -----------------------------------------------------------------------
+// <copyright file="Milestone.cs" company="Niklas Karl">
+// Copyright (c) Niklas Karl. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+// -----------------------------------------------------------------------
+
+using System;
 using System.Collections.Generic;
 using KitHub.Core;
 using Newtonsoft.Json.Linq;
@@ -143,16 +150,20 @@ namespace KitHub
 
         internal static Milestone Create(KitHubSession session, Repository repository, JToken data)
         {
-            if (data == null)
+            if (data == null || data.Type == JTokenType.Null)
             {
                 return null;
             }
+            
+            if (data is JObject obj && obj.TryGetValue("number", out JToken numberToken) && numberToken.Type == JTokenType.Integer)
+            {
+                Milestone milestone = GetOrCreate(session, repository, numberToken.Value<int>());
+                milestone.SetFromData(data);
 
-            int number = data.Value<int>("number");
-            Milestone milestone = GetOrCreate(session, repository, number);
-            milestone.SetFromData(data);
+                return milestone;
+            }
 
-            return milestone;
+            throw new KitHubDataException("The milestone object is invalid.", data);
         }
 
         internal static Milestone GetOrCreate(KitHubSession session, Repository repository, int number)

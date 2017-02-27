@@ -250,21 +250,25 @@ namespace KitHub
 
         internal static User Create(KitHubSession session, JToken data)
         {
-            if (data == null)
+            if (data == null || data.Type == JTokenType.Null)
             {
                 return null;
             }
 
-            string login = data.Value<string>("login");
-            if (string.IsNullOrEmpty(login))
+            if (data is JObject obj && obj.TryGetValue("login", out JToken loginToken) && loginToken is JValue loginValue && loginValue.Value is string login)
             {
-                throw new ArgumentException("The login of a user must not be null or empty.");
+                if (string.IsNullOrEmpty(login))
+                {
+                    throw new ArgumentException("The login of a user must not be null or empty.");
+                }
+
+                User user = GetOrCreate(session, login);
+                user.SetFromData(data);
+
+                return user;
             }
 
-            User user = GetOrCreate(session, login);
-            user.SetFromData(data);
-
-            return user;
+            throw new KitHubDataException("The user object is invalid.", data);
         }
 
         internal static User GetOrCreate(KitHubSession session, string login)

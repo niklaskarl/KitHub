@@ -86,16 +86,20 @@ namespace KitHub
 
         internal static Commit Create(KitHubSession session, Repository repository, JToken data)
         {
-            if (data == null)
+            if (data == null || data.Type == JTokenType.Null)
             {
                 return null;
             }
 
-            string sha = data.Value<string>("sha");
-            Commit commit = GetOrCreate(session, repository, sha);
-            commit.SetFromData(data);
+            if (data is JObject obj && obj.TryGetValue("sha", out JToken shaToken) && shaToken is JValue shaValue && shaValue.Value is string sha)
+            {
+                Commit commit = GetOrCreate(session, repository, sha);
+                commit.SetFromData(data);
 
-            return commit;
+                return commit;
+            }
+
+            throw new KitHubDataException("The commit object is invalid.", data);
         }
 
         internal static Commit GetOrCreate(KitHubSession session, Repository repository, string sha)

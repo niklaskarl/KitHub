@@ -1,5 +1,11 @@
-﻿using System;
-using System.IO;
+﻿// -----------------------------------------------------------------------
+// <copyright file="Event.cs" company="Niklas Karl">
+// Copyright (c) Niklas Karl. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+// -----------------------------------------------------------------------
+
+using System;
 using KitHub.Core;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -76,10 +82,12 @@ namespace KitHub
                         }
 
                         result.SetFromData(data);
+
+                        return result;
                     }
                 }
 
-                return result;
+                throw new KitHubDataException("The event object is invalid.", data);
             }
         }
 
@@ -94,7 +102,7 @@ namespace KitHub
                 }
                 catch (JsonException)
                 {
-                    throw new InvalidDataException();
+                    throw new KitHubDataException("The user object is invalid.", data);
                 }
 
                 User user = User.GetOrCreate(self.Session, entity.Login);
@@ -140,7 +148,7 @@ namespace KitHub
                 }
                 catch (JsonException)
                 {
-                    throw new InvalidDataException();
+                    throw new KitHubDataException("The repository object is invalid.", data);
                 }
 
                 int index = entity.FullName.IndexOf('/');

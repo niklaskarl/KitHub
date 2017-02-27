@@ -7,7 +7,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 using KitHub.Core;
 using Newtonsoft.Json.Linq;
 
@@ -31,7 +30,7 @@ namespace KitHub
         /// <summary>
         /// Gets the owner of the repository.
         /// </summary>
-        [ModelProperty("owner", Initializer = typeof(User.DefaultInitializer))]
+        [ModelProperty("owner")]
         public User Owner { get => _key.Owner; }
 
         /// <summary>
@@ -234,7 +233,7 @@ namespace KitHub
 
         internal static Repository Create(KitHubSession session, JToken data)
         {
-            if (data == null)
+            if (data == null || data.Type == JTokenType.Null)
             {
                 return null;
             }
@@ -244,7 +243,7 @@ namespace KitHub
                 return Create(session, User.Create(session, owner), data);
             }
 
-            throw new InvalidDataException();
+            throw new KitHubDataException("The repository object is invalid.", data);
         }
 
         internal static Repository Create(KitHubSession session, User owner, JToken data)
@@ -294,10 +293,7 @@ namespace KitHub
         {
             public object InitializeModel(BindableBase self, JToken data)
             {
-                Repository repository = Create(self.Session, data);
-                repository?.SetFromData(data);
-
-                return repository;
+                return Create(self.Session, data);
             }
         }
 

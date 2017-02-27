@@ -163,7 +163,7 @@ namespace KitHub
         }
 
         /// <inheritdoc />
-        protected override Uri Uri => throw new NotImplementedException();
+        protected override Uri Uri => new Uri($"/repos/{Repository.Owner.Login}/{Repository.Name}/issues/{Number}", UriKind.Relative);
 
         [ModelProperty("pull_request")]
         private PullRequestEntity PullRequest { get; set; }

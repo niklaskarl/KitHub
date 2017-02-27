@@ -14,7 +14,7 @@ using Newtonsoft.Json.Linq;
 namespace KitHub
 {
     /// <summary>
-    /// A repository hosted on GitHub.
+    /// A commit on GitHub.
     /// </summary>
     public sealed class Commit : RefreshableModelBase
     {
@@ -107,7 +107,7 @@ namespace KitHub
 
             if (string.IsNullOrEmpty(sha))
             {
-                throw new ArgumentException("The sha of a repository must not be null or empty.");
+                throw new ArgumentException("The sha of a commit must not be null or empty.");
             }
 
             CommitKey key = new CommitKey(session, repository, sha);

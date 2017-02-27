@@ -19,6 +19,7 @@ namespace KitHub
             : base(key.Session)
         {
             _key = key;
+            Labels = new ModelListProperty<Label>(key.Session);
         }
 
         /// <summary>
@@ -83,7 +84,11 @@ namespace KitHub
             internal set => SetProperty(value);
         }
 
-        // labels
+        /// <summary>
+        /// Gets the labels assiciated with the issue.
+        /// </summary>
+        [ModelListProperty("labels", Initializer = typeof(LabelInitializer))]
+        public IReadOnlyList<Label> Labels { get; }
 
         /// <summary>
         /// Gets the user assigned to the issue.
@@ -241,7 +246,15 @@ namespace KitHub
                 return Session.GetHashCode() ^ Repository.GetHashCode() ^ Number.GetHashCode();
             }
         }
-        
+
+        private sealed class LabelInitializer : IModelInitializer
+        {
+            public object InitializeModel(BindableBase self, JToken data)
+            {
+                return Label.Create(self.Session, (self as Issue).Repository, data);
+            }
+        }
+
         private sealed class PullRequestEntity
         {
             [JsonProperty(PropertyName = "url")]

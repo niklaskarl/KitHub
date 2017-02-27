@@ -100,7 +100,15 @@ namespace KitHub
             internal set => SetProperty(value);
         }
 
-        // milestone
+        /// <summary>
+        /// Gets the milestone the issue is associated with.
+        /// </summary>
+        [ModelProperty("milestone", Initializer = typeof(MilestoneInitializer))]
+        public Milestone Milestone
+        {
+            get => GetProperty() as Milestone;
+            internal set => SetProperty(value);
+        }
 
         /// <summary>
         /// Gets a value indicating whether the issue is locked or not.
@@ -252,6 +260,14 @@ namespace KitHub
             public object InitializeModel(BindableBase self, JToken data)
             {
                 return Label.Create(self.Session, (self as Issue).Repository, data);
+            }
+        }
+
+        private sealed class MilestoneInitializer : IModelInitializer
+        {
+            public object InitializeModel(BindableBase self, JToken data)
+            {
+                return Milestone.Create(self.Session, (self as Issue).Repository, data);
             }
         }
 

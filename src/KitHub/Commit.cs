@@ -71,6 +71,14 @@ namespace KitHub
 
         // TODO parents
 
+        /// <summary>
+        /// Gets the browser url to the commit.
+        /// </summary>
+        public Uri HtmlUrl
+        {
+            get => new Uri(Session.Client.BaseUri, new Uri($"{Repository.Owner.Login}/{Repository.Name}/commit/{Sha}", UriKind.Relative));
+        }
+
         /// <inheritdoc/>
         protected override Uri Uri => new Uri($"/repos/{Repository.Owner.Login}/{Repository.Name}/commits/{Sha}", UriKind.Relative);
 

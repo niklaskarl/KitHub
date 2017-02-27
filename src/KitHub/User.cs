@@ -147,7 +147,7 @@ namespace KitHub
         /// </summary>
         public Uri HtmlUrl
         {
-            get => new Uri(Session.Client.BaseUri, new Uri(Login, UriKind.Relative));
+            get => new Uri(Session.Client.BaseUri, new Uri($"/{Login}", UriKind.Relative));
         }
 
         /// <inheritdoc/>

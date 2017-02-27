@@ -219,6 +219,14 @@ namespace KitHub
             private set => SetProperty(value);
         }
 
+        /// <summary>
+        /// Gets the browser url to the repository.
+        /// </summary>
+        public Uri HtmlUrl
+        {
+            get => new Uri(Session.Client.BaseUri, new Uri($"/{Owner.Login}/{Name}", UriKind.Relative));
+        }
+
         /// <inheritdoc/>
         protected override Uri Uri => new Uri($"/repos/{Owner.Login}/{Name}", UriKind.Relative);
         

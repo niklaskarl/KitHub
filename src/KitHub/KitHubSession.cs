@@ -6,6 +6,7 @@
 // -----------------------------------------------------------------------
 
 using System;
+using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
 using KitHub.Client;
@@ -14,12 +15,21 @@ using Newtonsoft.Json;
 namespace KitHub
 {
     /// <summary>
+    /// A delegate to dispatch notifications to a UI thread.
+    /// </summary>
+    /// <param name="action">The action to perform on the UI thread.</param>
+    /// <returns>A <see cref="Task{User}"/> representing the asynchronous operation.</returns>
+    public delegate Task NotificationDispatcher(Action action);
+
+    /// <summary>
     /// Represents a session with the GitHub Api.
     /// This is the entry point to the KitHub library.
     /// </summary>
     public class KitHubSession
     {
         internal static readonly JsonSerializer Serializer = new JsonSerializer();
+
+        private NotificationDispatcher _dispatcher;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="KitHubSession"/> class.
@@ -36,7 +46,20 @@ namespace KitHub
         /// </summary>
         /// <param name="accessToken">The access token from which to authenticate the session.</param>
         public KitHubSession(string accessToken)
+            : this(accessToken, null)
         {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="KitHubSession"/> class.
+        /// The session will be authenticated with the provided access token and all <see cref="INotifyPropertyChanged"/>
+        /// notifications will be dispatched with the given dispatcher.
+        /// </summary>
+        /// <param name="accessToken">The access token from which to authenticate the session.</param>
+        /// <param name="dispatcher">The <see cref="NotificationDispatcher"/> to dispatch notifications to a UI thread.</param>
+        public KitHubSession(string accessToken, NotificationDispatcher dispatcher)
+        {
+            _dispatcher = dispatcher;
             Client = new KitHubClient(accessToken);
         }
 
@@ -75,8 +98,13 @@ namespace KitHub
 
         internal Task DispatchAsync(Action action)
         {
+            if (_dispatcher != null)
+            {
+                return _dispatcher(action);
+            }
+
             action();
-            return Task<object>.FromResult((object)null);
+            return Task.FromResult((object)null);
         }
     }
 }

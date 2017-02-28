@@ -153,7 +153,20 @@ namespace KitHub.Core
         {
             if (response.Links == null)
             {
-                throw new InvalidDataException("The paged response did not contain a link header.");
+                // it actually has only one page!
+                if (page != 0)
+                {
+                    throw new InvalidDataException("The paged response did not contain a link header.");
+                }
+
+                Uri uri = Uri;
+                if (!uri.IsAbsoluteUri)
+                {
+                    uri = new Uri(Session.Client.BaseApiUri, uri);
+                }
+
+                _pagedUri = uri.AbsoluteUri;
+                return 1;
             }
 
             int result;

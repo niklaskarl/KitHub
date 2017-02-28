@@ -69,10 +69,21 @@ namespace KitHub
         /// Gets the user authenticated with this session.
         /// </summary>
         /// <param name="cancellationToken">An optional <see cref="CancellationToken"/> to cancel the operation.</param>
-        /// <returns>A <see cref="Task{User}"/> representing the asynchronous operation.</returns>
-        public Task<User> GetAuthenticatedUserAsync(CancellationToken cancellationToken = default(CancellationToken))
+        /// <returns>A <see cref="Task{T}"/> representing the asynchronous operation.</returns>
+        public async Task<User> GetAuthenticatedUserAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            return User.GetAuthenticatedUserAsync(this, cancellationToken);
+            KitHubRequest request = new KitHubRequest()
+            {
+                Uri = new Uri("/user", UriKind.Relative)
+            };
+
+            KitHubResponse response = await Client.GetAsync(request, cancellationToken);
+            string login = response.Content.Value<string>("login");
+
+            User user = User.GetOrCreate(this, login);
+            user.SetFromResponse(response);
+
+            return user;
         }
 
         /// <summary>
@@ -80,7 +91,7 @@ namespace KitHub
         /// </summary>
         /// <param name="login">The login name of the user to get.</param>
         /// <param name="cancellationToken">An optional <see cref="CancellationToken"/> to cancel the operation.</param>
-        /// <returns>A <see cref="Task{User}"/> representing the asynchronous operation.</returns>
+        /// <returns>A <see cref="Task{T}"/> representing the asynchronous operation.</returns>
         public Task<User> GetUserAsync(string login, CancellationToken cancellationToken = default(CancellationToken))
         {
             return User.GetUserAsync(this, login, cancellationToken);
@@ -90,7 +101,7 @@ namespace KitHub
         /// Gets the public events of all GitHub in a paged list.
         /// </summary>
         /// <param name="cancellationToken">An optional <see cref="CancellationToken"/> to cancel the operation.</param>
-        /// <returns>A <see cref="Task{PagedActivityList}"/> representing the asynchronous operation.</returns>
+        /// <returns>A <see cref="Task{T}"/> representing the asynchronous operation.</returns>
         public Task<PagedEventList> GetPublicEventsAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             return PagedEventList.CreateAsync(this, new Uri("/events", UriKind.Relative), cancellationToken);

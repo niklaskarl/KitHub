@@ -215,24 +215,28 @@ namespace KitHub
             return _following;
         }
 
-        internal static async Task<User> GetAuthenticatedUserAsync(KitHubSession session, CancellationToken cancellationToken)
+        /// <summary>
+        /// Gets the events received by the user in a paged list.
+        /// </summary>
+        /// <param name="publicOnly">A value indicating whether oly public events should be retreived.</param>
+        /// <param name="cancellationToken">An optional <see cref="CancellationToken"/> to cancel the operation.</param>
+        /// <returns>A <see cref="Task{T}"/> representing the asynchronous operation.</returns>
+        public Task<PagedEventList> GetReceivedEventsAsync(bool publicOnly = false, CancellationToken cancellationToken = default(CancellationToken))
         {
-            KitHubRequest request = new KitHubRequest()
-            {
-                Uri = new Uri("/user", UriKind.Relative)
-            };
+            string suffix = publicOnly ? "/public" : string.Empty;
+            return PagedEventList.CreateAsync(Session, new Uri($"/users/{Login}/received_events{suffix}", UriKind.Relative), cancellationToken);
+        }
 
-            KitHubResponse response = await session.Client.GetAsync(request, cancellationToken);
-            string login = response.Content.Value<string>("login");
-            if (string.IsNullOrEmpty(login))
-            {
-                throw new ArgumentException("The login of a user must not be null or empty.");
-            }
-
-            User user = GetOrCreate(session, login);
-            user.SetFromResponse(response);
-
-            return user;
+        /// <summary>
+        /// Gets the events performed by the user in a paged list.
+        /// </summary>
+        /// <param name="publicOnly">A value indicating whether oly public events should be retreived.</param>
+        /// <param name="cancellationToken">An optional <see cref="CancellationToken"/> to cancel the operation.</param>
+        /// <returns>A <see cref="Task{T}"/> representing the asynchronous operation.</returns>
+        public Task<PagedEventList> GetPerformedEventsAsync(bool publicOnly = false, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            string suffix = publicOnly ? "/public" : string.Empty;
+            return PagedEventList.CreateAsync(Session, new Uri($"/users/{Login}/events{suffix}", UriKind.Relative), cancellationToken);
         }
 
         internal static async Task<User> GetUserAsync(KitHubSession session, string login, CancellationToken cancellationToken)

@@ -29,28 +29,7 @@ namespace KitHub.Core
         {
             if (data is JObject obj)
             {
-                TypeInfo type = GetType().GetTypeInfo();
-                while (type != null)
-                {
-                    foreach (PropertyInfo property in type.DeclaredProperties)
-                    {
-                        ModelPropertyAttribute attribute = property.GetCustomAttribute<ModelPropertyAttribute>(true);
-                        if (attribute != null)
-                        {
-                            SetPropertyFromData(obj, property, attribute);
-                            continue;
-                        }
-
-                        ModelListPropertyAttribute listAttribute = property.GetCustomAttribute<ModelListPropertyAttribute>(true);
-                        if (listAttribute != null)
-                        {
-                            SetListFromData(obj, property, listAttribute);
-                            continue;
-                        }
-                    }
-
-                    type = type.BaseType?.GetTypeInfo();
-                }
+                SetFromDataForType(GetType().GetTypeInfo(), obj);
             }
         }
 
@@ -72,6 +51,32 @@ namespace KitHub.Core
             }
 
             return null;
+        }
+
+        private void SetFromDataForType(TypeInfo type, JObject data)
+        {
+            TypeInfo baseType = type.BaseType?.GetTypeInfo();
+            if (baseType != null)
+            {
+                SetFromDataForType(baseType, data);
+            }
+
+            foreach (PropertyInfo property in type.DeclaredProperties)
+            {
+                ModelPropertyAttribute attribute = property.GetCustomAttribute<ModelPropertyAttribute>(true);
+                if (attribute != null)
+                {
+                    SetPropertyFromData(data, property, attribute);
+                    continue;
+                }
+
+                ModelListPropertyAttribute listAttribute = property.GetCustomAttribute<ModelListPropertyAttribute>(true);
+                if (listAttribute != null)
+                {
+                    SetListFromData(data, property, listAttribute);
+                    continue;
+                }
+            }
         }
 
         private void SetPropertyFromData(JObject data, PropertyInfo property, ModelPropertyAttribute attribute)

@@ -73,6 +73,9 @@ namespace KitHub
                     {
                         switch (type)
                         {
+                            case "IssuesEvent":
+                                result = new IssueEvent(self.Session);
+                                break;
                             case "PushEvent":
                                 result = new PushEvent(self.Session);
                                 break;

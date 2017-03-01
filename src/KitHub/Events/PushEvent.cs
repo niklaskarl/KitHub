@@ -9,11 +9,12 @@ using System;
 using System.Collections.Generic;
 using KitHub.Core;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace KitHub
 {
     /// <summary>
-    /// A push event issues by GitHub.
+    /// A push event sent from GitHub.
     /// </summary>
     public class PushEvent : Event
     {
@@ -45,19 +46,19 @@ namespace KitHub
         /// Gets the reference the commits where pushed to.
         /// </summary>
         [ModelProperty("payload.ref")]
-        public string Ref { get; set; }
+        public string Ref { get; private set; }
 
         /// <summary>
         /// Gets the sha of the head of the push.
         /// </summary>
         [ModelProperty("payload.head")]
-        public string Head { get; set; }
+        public string Head { get; private set; }
 
         /// <summary>
         /// Gets the sha of the head before the push.
         /// </summary>
         [ModelProperty("payload.before")]
-        public string Before { get; set; }
+        public string Before { get; private set; }
 
         /// <summary>
         /// Gets the commits in the push.

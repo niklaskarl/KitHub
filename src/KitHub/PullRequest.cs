@@ -276,7 +276,7 @@ namespace KitHub
         {
             public object InitializeModel(BindableBase self, JToken data)
             {
-                return Label.Create(self.Session, (self as ConcreteIssue).Repository, data);
+                return Label.Create(self.Session, (self as PullRequest).Repository, data);
             }
         }
 
@@ -284,7 +284,7 @@ namespace KitHub
         {
             public object InitializeModel(BindableBase self, JToken data)
             {
-                return Milestone.Create(self.Session, (self as ConcreteIssue).Repository, data);
+                return Milestone.Create(self.Session, (self as PullRequest).Repository, data);
             }
         }
     }

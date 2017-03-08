@@ -76,6 +76,9 @@ namespace KitHub
                             case "IssuesEvent":
                                 result = new IssueEvent(self.Session);
                                 break;
+                            case "PullRequestEvent":
+                                result = new PullRequestEvent(self.Session);
+                                break;
                             case "PushEvent":
                                 result = new PushEvent(self.Session);
                                 break;

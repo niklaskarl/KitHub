@@ -37,7 +37,7 @@ namespace KitHub
         {
             public object InitializeModel(BindableBase self, JToken data)
             {
-                return Issue.Create(self.Session, (self as IssueEvent).Repository, data);
+                return ConcreteIssue.Create(self.Session, (self as IssueEvent).Repository, data);
             }
         }
     }

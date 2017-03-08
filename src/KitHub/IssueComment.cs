@@ -82,7 +82,7 @@ namespace KitHub
         /// <inheritdoc />
         protected override Uri Uri => new Uri($"/repos/{Issue.Repository.Owner.Login}/{Issue.Repository.Name}/issues/comments/{Id}", UriKind.Relative);
 
-        internal static IssueComment Create(KitHubSession session, Issue issue, JToken data)
+        internal static IssueComment Create(KitHubSession session, ConcreteIssue issue, JToken data)
         {
             if (data == null || data.Type == JTokenType.Null)
             {
@@ -100,7 +100,7 @@ namespace KitHub
             throw new KitHubDataException("The issue object is invalid.", data);
         }
 
-        internal static IssueComment GetOrCreate(KitHubSession session, Issue issue, long id)
+        internal static IssueComment GetOrCreate(KitHubSession session, ConcreteIssue issue, long id)
         {
             if (issue == null)
             {
@@ -131,7 +131,7 @@ namespace KitHub
 
         internal sealed class IssueCommentKey
         {
-            public IssueCommentKey(KitHubSession session, Issue issue, long id)
+            public IssueCommentKey(KitHubSession session, ConcreteIssue issue, long id)
             {
                 Session = session;
                 Issue = issue;
@@ -140,7 +140,7 @@ namespace KitHub
 
             public KitHubSession Session { get; }
 
-            public Issue Issue { get; }
+            public ConcreteIssue Issue { get; }
 
             public long Id { get; }
 

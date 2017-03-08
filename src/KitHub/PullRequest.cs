@@ -184,13 +184,19 @@ namespace KitHub
             internal set => _issue.ClosedBy = value;
         }
 
-        // merged_at
+        /// <summary>
+        /// Gets the timestamp the pull request was merged at.
+        /// </summary>
+        [ModelProperty("merged_at")]
+        public DateTimeOffset? MergedAt
+        {
+            get => GetProperty() as DateTimeOffset?;
+            internal set => SetProperty(value);
+        }
 
-        // head
+        // TODO add head
 
-        // base
-
-        // (_links)
+        // TODO add base
 
         /// <inheritdoc/>
         protected override Uri Uri => new Uri($"/repos/{Repository.Owner.Login}/{Repository.Name}/pulls/{Number}", UriKind.Relative);

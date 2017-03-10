@@ -2,6 +2,8 @@
   <PropertyGroup>
     <PackageId>KitHub</PackageId>
     <PackageTags>github;api</PackageTags>
+    <VersionPrefix>0.9.0</VersionPrefix>
+    <VersionSuffix>alpha</VersionSuffix>
     <Description />
     <Authors>Niklas Karl</Authors>
     <Copyright>Copyright © Niklas Karl 2017</Copyright>

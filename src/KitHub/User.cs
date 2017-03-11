@@ -205,7 +205,7 @@ namespace KitHub
         {
             if (_following == null)
             {
-                _following = await UserList.CreateAsync(Session, new Uri($"/users/{Login}/followers", UriKind.Relative), cancellationToken);
+                _following = await UserList.CreateAsync(Session, new Uri($"/users/{Login}/following", UriKind.Relative), cancellationToken);
             }
             else if (update)
             {
